@@ -144,6 +144,7 @@ function toggleFaq(btn) {
     document.querySelectorAll(selector).forEach(function(el) {
       el.setAttribute('tabindex', '0');
       if (!el.hasAttribute('role')) el.setAttribute('role', 'button');
+      el.setAttribute('aria-pressed', el.classList.contains('active') ? 'true' : 'false');
       el.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -153,12 +154,20 @@ function toggleFaq(btn) {
     });
   }
 
-  bindFocusableClickables('.faq-q', function() {
-    toggleFaq(this);
-  });
-  bindFocusableClickables('.pac-period-row', function() {
-    this.click();
-  });
+  function initFocusableClickables() {
+    bindFocusableClickables('.faq-q', function() {
+      toggleFaq(this);
+    });
+    bindFocusableClickables('.pac-period-row', function() {
+      this.click();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFocusableClickables);
+  } else {
+    initFocusableClickables();
+  }
 })();
 
 // ── PLAN SELECTOR
@@ -550,48 +559,62 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 
     el.innerHTML =
       '<div class="pac-result-tag">Crédito ' + p + 'x · taxa ' + fmtPct(taxa) + ' · ' + lbl + '</div>' +
-      '<div class="pac-result-val">' + p + 'x/u00a0' + fmt(parcC) + '</div>' +
+      '<div class="pac-result-val">' + p + 'x\u00a0' + fmt(parcC) + '</div>' +
       '<div class="pac-result-sub" style="display:flex;justify-content:space-between;margin-top:4px">' +
         '<span>Cliente paga: ' + fmt(base) + ' sem juros</span>' +
         '<span style="color:rgba(88,117,133,0.9)">Você recebe: ' + fmt(liq) + '</span>' +
       '</div>';
   }
 
-  function updateCardPrice(id, idx, btn) {
-    var card = btn.closest('.plans-alt-card');
+  function updateCardPrice(id, idx, cardOrElement) {
+    var card = cardOrElement && cardOrElement.closest ? (cardOrElement.closest('.plans-alt-card') || cardOrElement) : cardOrElement;
     if (!card) return;
     var priceEl = card.querySelector('.pac-amount');
     var periodEl = card.querySelector('.pac-period');
     if (!priceEl || !periodEl) return;
 
-    var base = BASES[id][idx];
+    var base = BASES[id] && BASES[id][idx];
+    if (typeof base !== 'number') return;
     var parts = base.toFixed(2).split('.');
-    var amountText = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    priceEl.textContent = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
     var suffix = '';
-    var currentPeriodText = periodEl.textContent.trim();
-    var commaIndex = currentPeriodText.indexOf(',');
-    if (commaIndex !== -1 && currentPeriodText.length > commaIndex + 3) {
-      suffix = currentPeriodText.slice(commaIndex + 3);
+    if (id !== 'consulta') {
+      if (idx === 0) suffix = '/mês';
+      else if (idx === 1) suffix = '/3 meses';
+      else if (idx === 2) suffix = '/6 meses';
+      else suffix = '/ano';
     }
-    priceEl.textContent = amountText;
     periodEl.textContent = ',' + parts[1] + suffix;
   }
 
+  function syncCardPeriodRows(card, idx) {
+    if (!card) return;
+    card.querySelectorAll('.pac-period-row').forEach(function(row, index) {
+      var active = index === idx;
+      row.classList.toggle('active', active);
+      row.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+
+  function syncSimButtons(id, idx) {
+    var simSection = document.getElementById('sim-mods-' + id);
+    if (!simSection) return;
+    simSection.querySelectorAll('.pac-sim-mod-btn').forEach(function(b, index) {
+      b.classList.toggle('active', index === idx);
+    });
+  }
+
   window.simSetMod = function(id, idx, btn) {
+    PERIOD[id] = idx;
     SIM[id].mod = idx;
-    btn.closest('.pac-sim-mods').querySelectorAll('.pac-sim-mod-btn')
-      .forEach(function(b){ b.classList.remove('active'); });
-    btn.classList.add('active');
+
+    syncSimButtons(id, idx);
 
     var card = btn.closest('.plans-alt-card');
     if (card) {
-      var expected = "pacSetMod('" + id + "'," + idx + ",";
-      card.querySelectorAll('.pac-period-row').forEach(function(row) {
-        var onclick = row.getAttribute('onclick') || '';
-        row.classList.toggle('active', onclick.indexOf(expected) === 0);
-      });
-      var activeRow = card.querySelector('.pac-period-row.active');
-      if (activeRow) updateCardPrice(id, idx, activeRow);
+      syncCardPeriodRows(card, idx);
+      updateCardPrice(id, idx, card);
     }
 
     render(id);
@@ -603,33 +626,10 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 
     var card = btn.closest('.plans-alt-card');
     if (card) {
-      var priceEl = card.querySelector('.pac-amount');
-      var periodEl = card.querySelector('.pac-period');
-      if (priceEl && periodEl) {
-        var base = BASES[id][idx];
-        var parts = base.toFixed(2).split('.');
-        var amountText = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-        var suffix = '';
-        var currentPeriodText = periodEl.textContent.trim();
-        var commaIndex = currentPeriodText.indexOf(',');
-        if (commaIndex !== -1 && currentPeriodText.length > commaIndex + 3) {
-          suffix = currentPeriodText.slice(commaIndex + 3);
-        }
-        priceEl.textContent = amountText;
-        periodEl.textContent = ',' + parts[1] + suffix;
-      }
+      syncCardPeriodRows(card, idx);
+      updateCardPrice(id, idx, card);
+      syncSimButtons(id, idx);
     }
-
-    var simSection = document.getElementById('sim-mods-' + id);
-    if (simSection) {
-      simSection.querySelectorAll('.pac-sim-mod-btn').forEach(function(b, index) {
-        b.classList.toggle('active', index === idx);
-      });
-    }
-
-    btn.closest('.pac-periods').querySelectorAll('.pac-period-row')
-      .forEach(function(b){ b.classList.remove('active'); });
-    btn.classList.add('active');
 
     render(id);
   };
@@ -658,6 +658,17 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   };
 
   document.addEventListener('DOMContentLoaded', function() {
-    ['lite','vip','consulta'].forEach(function(id){ render(id); });
+    ['lite','vip','consulta'].forEach(function(id) {
+      var simSection = document.getElementById('sim-mods-' + id);
+      if (simSection) {
+        var card = simSection.closest('.plans-alt-card');
+        if (card) {
+          syncCardPeriodRows(card, PERIOD[id]);
+          updateCardPrice(id, PERIOD[id], card);
+          syncSimButtons(id, PERIOD[id]);
+        }
+      }
+      render(id);
+    });
   });
 })();

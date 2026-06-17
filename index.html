@@ -87,25 +87,35 @@
 <!-- ═══════════════════════════════════════════════════ -->
 <!-- ═══════ HERO ═══════ -->
 <section id="hero" aria-label="Apresentação">
-  <div class="hero-photo">
-    <img id="heroImg"
-         src=""
-         alt="Carlos Elias — Nutricionista Esportivo"
-         width="1440" height="1920"
-         loading="eager"
-         fetchpriority="high"
-         decoding="async">
-  </div>
   <div class="hero-overlay-left"  aria-hidden="true"></div>
   <div class="hero-overlay-bottom" aria-hidden="true"></div>
-  <div class="hero-credential glass" aria-hidden="true">
-    <div class="hero-cred-tag">Nutricionista Esportivo</div>
-    <div class="hero-cred-name">Carlos Elias</div>
-    <div class="hero-cred-crn">CRN-11 23078/P</div>
-  </div>
   <div class="container">
-    <div class="hero-inner">
-      <div class="hero-content" id="heroContent">
+    <div class="hero-inner hero-grid">
+      <div class="hero-col hero-col-photo">
+        <div class="hero-photo">
+          <img id="heroImg"
+               src=""
+               alt="Carlos Elias — Nutricionista Esportivo"
+               width="1440" height="1920"
+               loading="eager"
+               fetchpriority="high"
+               decoding="async">
+        </div>
+        <!-- specialties line if space allows (desktop) -->
+        <div class="hero-specialties" aria-hidden="true">
+          <span>Hipertrofia</span>
+          <span>Recomposição</span>
+          <span>Endurance</span>
+          <span>Emagrecimento</span>
+        </div>
+        <div class="hero-credential glass" aria-hidden="true">
+          <div class="hero-cred-tag">Nutriionista Esportivo</div>
+          <div class="hero-cred-name">Carlos Elias</div>
+          <div class="hero-cred-crn">CRN-11 23078/P</div>
+        </div>
+      </div>
+      <div class="hero-col hero-col-content">
+        <div class="hero-content" id="heroContent">
         <div class="hero-eyebrow">
           <div class="hero-eyebrow-dot"></div>
           <span class="t-label">Nutrição esportiva online · Todo o Brasil</span>
@@ -123,6 +133,12 @@
           </a>
           <a href="#sobre" class="btn btn-secondary">Conheça o método ↓</a>
         </div>
+        <!-- Benefícios discretos entre CTAs e stats -->
+        <div class="hero-benefits" aria-hidden="true">
+          <span class="benefit-chip">100% online</span>
+          <span class="benefit-chip">Plano individualizado</span>
+          <span class="benefit-chip">Suporte via WhatsApp</span>
+        </div>
         <div class="hero-stats">
           <div>
             <div class="hero-stat-num" data-target="200" data-suffix="+">0</div>
@@ -136,6 +152,7 @@
             <div class="hero-stat-num" data-target="99" data-suffix="%">0</div>
             <div class="hero-stat-label">Aprovação</div>
           </div>
+        </div>
         </div>
       </div>
     </div>
@@ -673,7 +690,7 @@
           <div class="pac-equiv">economize até 25% no anual</div>
           <div class="pac-spark"><svg viewBox="0 0 180 50" fill="none"><path d="M0 38 L45 32 L90 24 L135 18 L180 12 L180 50 L0 50 Z" fill="#587585" opacity="0.12"/><path d="M0 38 L45 32 L90 24 L135 18 L180 12" fill="none" stroke="#587585" stroke-width="2.2" stroke-linecap="round" style="filter:drop-shadow(0 0 4px #587585)"/><circle cx="180" cy="12" r="3.5" fill="#587585"/></svg></div>
           <div class="pac-periods"><div class="pac-period-row active" onclick="pacSetMod('lite',0,this)"><span class="pac-period-name">Mensal</span><span class="pac-period-val">R$ 199,90</span></div>
-<div class="pac-period-row" onclick="pacSetMod('lite',1,this)"><span class="pac-period-name">Trimestral</span><span class="pac-period-val">R$ 593,90<span class="pac-period-save">10% off</span></span></div>
+<div class="pac-period-row" onclick="pacSetMod('lite',1,this)"><span class="pac-period-name">Trimestral</span><span class="pac-period-val">R$ 593,90<span class="pac-period-save">economia</span></span></div>
 <div class="pac-period-row" onclick="pacSetMod('lite',2,this)"><span class="pac-period-name">Semestral</span><span class="pac-period-val">R$ 979,90<span class="pac-period-save">18% off</span></span></div>
 <div class="pac-period-row" onclick="pacSetMod('lite',3,this)"><span class="pac-period-name">Anual</span><span class="pac-period-val">R$ 1.799,90<span class="pac-period-save">25% off</span></span></div>
 </div>
