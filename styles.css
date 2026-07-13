@@ -23,11 +23,10 @@ body {
   background: var(--black);
   color: var(--snow);
   line-height: 1.6;
-  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 html {
-  overflow-x: hidden;
+  /* allow natural overflow; layout fixes applied to address root causes */
 }
 
 /* ── ACCESSIBILITY: focus-visible and reduced-motion */
@@ -143,7 +142,7 @@ select:focus-visible {
   height: 68px;
 }
 .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.nav-logo svg { width: 32px; height: auto; }
+.nav-logo svg { width: 36px; height: auto; flex-shrink: 0; }
 .nav-logo-text {
   font-weight: 900;
   font-size: 1rem;
@@ -498,7 +497,7 @@ select:focus-visible {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 32px;
+  gap: 24px;
 }
 .sobre-logo-symbol {
   width: 160px; height: auto;
@@ -1137,42 +1136,195 @@ select:focus-visible {
 .benefit-text { font-size: 0.8rem; color: var(--mist); line-height: 1.6; }
 
 /* ─── FAQ ─── */
-#faq { background: var(--black); }
-.faq-list {
-  display: flex; flex-direction: column; gap: 12px;
-  margin-top: 56px;
-  max-width: 800px; margin-left: auto; margin-right: auto;
+
+#faq {
+  background: var(--black);
 }
+
+.faq-list {
+  width: 100%;
+  max-width: 800px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  margin: 56px auto 0;
+}
+
 .faq-item {
-  border-radius: var(--radius-sm);
+  width: 100%;
+  min-width: 0;
+
   overflow: hidden;
-  border: 1px solid rgba(88,117,133,0.18);
+
+  border: 1px solid rgba(88, 117, 133, 0.18);
+  border-radius: var(--radius-sm);
+
+  background: transparent;
+
   transition: border-color var(--transition);
 }
-.faq-item.open { border-color: rgba(88,117,133,0.35); }
-.faq-q {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 20px 24px;
-  cursor: pointer;
-  background: rgba(255,255,255,0.02);
-  user-select: none;
-  gap: 16px;
+
+.faq-item.open {
+  border-color: rgba(88, 117, 133, 0.35);
 }
-.faq-q:hover { background: rgba(255,255,255,0.04); }
-.faq-q-text { font-size: 0.925rem; font-weight: 600; color: var(--snow); }
-.faq-icon { color: var(--mist); font-size: 1.2rem; flex-shrink: 0; transition: transform var(--transition); font-weight: 300; line-height: 1; }
-.faq-item.open .faq-icon { transform: rotate(45deg); color: var(--steel); }
+
+/* Cabeçalho clicável da pergunta */
+.faq-list .faq-q {
+  width: 100%;
+  min-width: 0;
+  min-height: 64px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  margin: 0;
+  padding: 20px 24px;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  border: 0;
+  border-radius: 0;
+
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: none;
+
+  color: inherit;
+  font: inherit;
+  text-align: left;
+
+  cursor: pointer;
+  user-select: none;
+}
+
+.faq-list .faq-q:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.faq-list .faq-q:focus-visible {
+  outline: 2px solid rgba(182, 193, 199, 0.7);
+  outline-offset: -3px;
+}
+
+.faq-q-text {
+  flex: 1 1 auto;
+  min-width: 0;
+
+  color: var(--snow);
+
+  font-size: 0.925rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: left;
+
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.faq-icon {
+  width: 20px;
+  height: 20px;
+
+  flex: 0 0 auto;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-left: auto;
+
+  color: var(--mist);
+
+  font-size: 1.2rem;
+  font-weight: 300;
+  line-height: 1;
+
+  transition:
+    transform var(--transition),
+    color var(--transition);
+}
+
+.faq-item.open .faq-icon {
+  color: var(--steel);
+  transform: rotate(45deg);
+}
+
 .faq-a {
-  max-height: 0; overflow: hidden;
+  width: 100%;
+  min-width: 0;
+  max-height: 0;
+
+  overflow: hidden;
+
   transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .faq-a-inner {
+  width: 100%;
+  min-width: 0;
+
   padding: 0 24px 20px;
-  font-size: 0.875rem;
+
   color: var(--silver);
+
+  font-size: 0.875rem;
   line-height: 1.7;
 }
-.faq-item.open .faq-a { max-height: 300px; }
+
+.faq-item.open .faq-a {
+  max-height: 600px;
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .faq-list {
+    margin-top: 40px;
+    gap: 10px;
+  }
+
+  .faq-list .faq-q {
+    min-height: 60px;
+    padding: 18px 20px;
+  }
+
+  .faq-a-inner {
+    padding: 0 20px 18px;
+  }
+}
+
+/* Celular */
+@media (max-width: 480px) {
+  .faq-list {
+    margin-top: 32px;
+  }
+
+  .faq-list .faq-q {
+    min-height: 58px;
+    padding: 17px 16px;
+    gap: 12px;
+  }
+
+  .faq-q-text {
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  .faq-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 1.1rem;
+  }
+
+  .faq-a-inner {
+    padding: 0 16px 17px;
+    font-size: 0.84rem;
+    line-height: 1.65;
+  }
+}
 
 /* ─── CTA PRINCIPAL ─── */
 #cta-main {
@@ -1590,7 +1742,6 @@ select:focus-visible {
   .hero-title { font-size: clamp(42px, 13vw, 64px); }
   .sobre-grid { grid-template-columns: 1fr; gap: 48px; }
   .sobre-logo-col { padding-top: 0; }
-  .sobre-logo-symbol { width: 100px; }
   .hero-title { font-size: clamp(44px, 13vw, 68px); }
   .hero-content { max-width: 100%; }
   .hero-stats { gap: 20px; flex-wrap: wrap; }
@@ -1606,8 +1757,8 @@ select:focus-visible {
   .wa-float {
     width: 48px;
     height: 48px;
-    right: 14px;
-    bottom: 14px;
+    right: 16px;
+    bottom: calc(12px + env(safe-area-inset-bottom));
   }
 }
 
@@ -1698,8 +1849,10 @@ select:focus-visible {
 
 /* ── LOGO: símbolo com efeito draw + fill ── */
 .sobre-logo-symbol {
-  width: 220px; height: auto;
-  filter: drop-shadow(0 0 0px rgba(88,117,133,0));
+  width: clamp(160px, 18vw, 230px);
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 0 0 rgba(88, 117, 133, 0));
   transition: filter 0.4s ease;
 }
 /* Polígonos: animação de draw via stroke */
@@ -1719,7 +1872,7 @@ select:focus-visible {
 #lp1 { stroke: #E1E7E7; --dash-len: 450; }
 #lp2 { stroke: #B6C1C7; --dash-len: 310; }
 #lp3 { stroke: #B6C1C7; --dash-len: 310; }
-#lp4 { stroke: #587585; --dash-len: 120; }
+#lp4 { stroke: #e1e7e7; --dash-len: 120; }
 /* Diamante pulsa ao final */
 #lp4.drawn {
   animation:
@@ -2200,7 +2353,7 @@ select:focus-visible {
 .pac-sim-mod-btn:hover  { border-color: rgba(255,255,255,0.14); color: rgba(255,255,255,0.6); }
 .pac-sim-mod-btn.active { border-color: rgba(88,117,133,0.5); background: rgba(88,117,133,0.15); color: rgba(255,255,255,0.9); }
 
-/* Toggle PIX / Crédito / Débito */
+/* Toggle PIX / Crédito */
 .pac-toggle { display: flex; gap: 4px; margin-bottom: 8px; }
 .pac-mode-btn {
   flex: 1; padding: 5px 0; border-radius: 6px;
@@ -2222,6 +2375,7 @@ select:focus-visible {
   color: rgba(255,255,255,0.3); cursor: pointer;
   transition: all 0.18s ease; text-align: center;
 }
+/* Table expandable removed: styles cleaned up */
 .pac-parc-btn:hover  { border-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.6); }
 .pac-parc-btn.active { border-color: rgba(88,117,133,0.5); background: rgba(88,117,133,0.15); color: rgba(255,255,255,0.95); }
 
@@ -2271,6 +2425,40 @@ select:focus-visible {
 @media (max-width: 480px) {
   .pac-parc-grid { grid-template-columns: repeat(4,1fr); }
   .pac-amount    { font-size: 2rem; }
+}
+/* Additional responsive tweaks */
+img, svg, video { max-width: 100%; height: auto; }
+
+/* Ensure hamburger touch area and mobile menu usability */
+@media (max-width: 1024px) {
+  .hamburger { padding: 10px; min-width: 44px; min-height: 44px; border-radius: 6px; }
+  .mobile-menu { top: 64px; }
+}
+
+/* Parcel selector: ensure adequate tap targets and layout on very small screens */
+.pac-parc-btn { min-height: 44px; padding: 8px 0; }
+@media (max-width: 360px) {
+  .pac-parc-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap:6px; }
+  .pac-amount { font-size: 1.6rem; }
+}
+@media (max-width: 320px) {
+  .pac-parc-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap:6px; }
+  .pac-amount { font-size: 1.5rem; }
+}
+
+/* Hero adjustments for small viewports */
+@media (max-width: 480px) {
+  .hero-col-photo { min-height: 320px; }
+  #hero { padding-top: 64px; }
+  .hero-photo img { object-position: 50% 45%; }
+}
+@media (max-width: 360px) {
+  .hero-col-photo { min-height: 260px; }
+  .hero-content { padding: 0 16px; }
+}
+@media (max-width: 320px) {
+  .hero-col-photo { min-height: 220px; }
+  .hero-content { padding-inline: 16px; }
 }
 /* ══ FIM PLANOS ════════════════════════════════════════════════════════════ */
 
@@ -2345,6 +2533,11 @@ footer {
 .footer-logo {
   display: flex; align-items: center; gap: 10px;
   margin-bottom: 14px;
+}
+.footer-logo svg {
+  width: 34px;
+  height: auto;
+  flex-shrink: 0;
 }
 .footer-logo-text {
   font-weight: 900; font-size: 0.9rem;

@@ -68,7 +68,6 @@ revealEls.forEach(el => revealObs.observe(el));
 (function() {
   var logo     = document.getElementById('sobreLogo');
   var tagline  = document.getElementById('sobreTagline');
-  var wordmark = document.getElementById('logo-wordmark');
   var logoCol  = document.getElementById('sobreLogoCol');
   if (!logo) return;
 
@@ -89,14 +88,7 @@ revealEls.forEach(el => revealObs.observe(el));
       }, delays[i]);
     });
 
-    // 2. Separador e wordmark sobem após símbolo terminar
-    var sep = document.getElementById('logo-sep');
-    if (sep) setTimeout(function() { sep.classList.add('sep-in'); }, 820);
-    if (wordmark) setTimeout(function() {
-      wordmark.classList.add('wordmark-in');
-    }, 900);
-
-    // 3. Float do logo inteiro
+    // 2. Float do logo inteiro
     setTimeout(function() {
       logo.classList.add('animated');
     }, 1000);
@@ -155,12 +147,7 @@ function toggleFaq(btn) {
   }
 
   function initFocusableClickables() {
-    bindFocusableClickables('.faq-q', function() {
-      toggleFaq(this);
-    });
-    bindFocusableClickables('.pac-period-row', function() {
-      this.click();
-    });
+    // `.faq-q` and `.pac-period-row` are semantic <button> elements now; no extra key bindings required.
   }
 
   if (document.readyState === 'loading') {
@@ -203,7 +190,7 @@ document.getElementById('leadForm').addEventListener('submit', async function(e)
 
   const obj = `Objetivo: ${objetivo}. `;
   const msg = mensagem ? `/n/n${mensagem}` : '';
-  const text = encodeURIComponent(`Olá Carlos! Me chamo ${nome}. Meu WhatsApp é ${whatsapp}. ${obj}Entrei em contato pelo site.${msg}`);
+  const text = encodeURIComponent(`Olá Elias! Me chamo ${nome}. Meu WhatsApp é ${whatsapp}. ${obj}Entrei em contato pelo site.${msg}`);
 
   showFeedback('Mensagem registrada. Abrindo WhatsApp...', 'success');
   window.open(`https://wa.me/5585996639595?text=${text}`, '_blank');
@@ -491,78 +478,64 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 })();
 
 
-// ── SIMULADOR PAC — InfinitePay · taxas reais 2025/2026
+// ── SIMULADOR PAC — InfinitePay
 (function() {
-
-  // Taxas reais InfinitePay (Visa/Mastercard, recebimento em 1 dia útil)
-  var TAXAS = {
-    pix:    0,
-    debito: 0.0075,
-    credito: {
-       1: 0.0269,  2: 0.0394,  3: 0.0446,  4: 0.0498,
-       5: 0.0549,  6: 0.0599,  7: 0.0651,  8: 0.0699,
-       9: 0.0751, 10: 0.0799, 11: 0.0849, 12: 0.0899
-    }
-  };
-
-  var BASES = {
-    lite:     [199.90, 593.90, 979.90, 1799.90],
-    vip:      [249.90, 674.90, 1229.90, 2249.00],
-    consulta: [349.90, 299.90, 499.90],
-  };
-
-  var MOD_LABELS = {
-    lite:     ['Mensal','Trimestral','Semestral','Anual'],
-    vip:      ['Mensal','Trimestral','Semestral','Anual'],
-    consulta: ['Avulsa','Retorno','Combo'],
-  };
-
-  var SIM    = { lite:{mod:0,mode:'pix',parc:1}, vip:{mod:0,mode:'pix',parc:1}, consulta:{mod:0,mode:'pix',parc:1} };
-  var PERIOD = { lite:0, vip:0, consulta:0 };
-
-  function fmt(n) {
-    return 'R$\u00a0' + n.toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  // Simulador usando INFINITEPAY_APPROVED_DATA as source of truth
+  if (typeof INFINITEPAY_APPROVED_DATA === 'undefined') {
+    console.error('Dados comerciais da InfinitePay não foram carregados.');
+    return;
   }
-  function fmtPct(n) { return (n*100).toFixed(2).replace('.',',') + '%'; }
+  var DATA = INFINITEPAY_APPROVED_DATA;
+
+  var OPTION_KEYS = {
+    lite: ['mensal','trimestral','semestral','anual'],
+    vip:  ['mensal','trimestral','semestral','anual'],
+    consulta: ['retorno','online','presencial']
+  };
+
+  var SIM = { lite:{mod:0,mode:'pix',parc:1}, vip:{mod:0,mode:'pix',parc:1}, consulta:{mod:2,mode:'pix',parc:1} };
+  var PERIOD = { lite:0, vip:0, consulta:2 };
+
+  const currencyFormatter = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+  function formatCurrency(value) { return currencyFormatter.format(value); }
+
+  function getPlanKey(id) { return id === 'consulta' ? 'consultas' : id; }
+  function getOptionKey(id, idx) { return OPTION_KEYS[id] && OPTION_KEYS[id][idx]; }
 
   function render(id) {
-    var s    = SIM[id];
-    var base = BASES[id][s.mod];
-    var lbl  = MOD_LABELS[id][s.mod];
-    var el   = document.getElementById('pac-result-' + id);
+    var s = SIM[id];
+    var planKey = getPlanKey(id);
+    var optionKey = getOptionKey(id, s.mod);
+    var el = document.getElementById('pac-result-' + id);
     if (!el) return;
+
+    var plan = DATA.plans && DATA.plans[planKey];
+    var option = plan && plan.options && optionKey ? plan.options[optionKey] : null;
+    var base = option && typeof option.base === 'number' ? option.base : 0;
+    var lbl = option && option.label ? option.label : '';
 
     if (s.mode === 'pix') {
       el.innerHTML =
-        '<div class="pac-result-tag">PIX · Taxa 0% · ' + lbl + '</div>' +
-        '<div class="pac-result-val">' + fmt(base) + '</div>' +
-        '<div class="pac-result-sub">Valor cobrado do cliente · sem taxa</div>';
+        '<div class="pac-result-tag">PIX · TAXA 0% · ' + lbl + '</div>' +
+        '<div class="pac-result-val">' + formatCurrency(base) + '</div>' +
+        '<div class="pac-result-sub">Valor cobrado do cliente, sem acréscimo.</div>';
       return;
     }
 
-    if (s.mode === 'debito') {
-      var descD  = base * TAXAS.debito;
-      var liqD   = base - descD;
-      el.innerHTML =
-        '<div class="pac-result-tag">Débito · ' + fmtPct(TAXAS.debito) + ' · ' + lbl + '</div>' +
-        '<div class="pac-result-val">' + fmt(base) + '</div>' +
-        '<div class="pac-result-sub">Cliente paga: ' + fmt(base) + ' · Você recebe: ' + fmt(liqD) + '</div>';
+    // Crédito: use dados tabelados diretamente
+    var p = s.parc;
+    var credit = option && option.credit && option.credit[p] ? option.credit[p] : null;
+    if (!credit) {
+      el.innerHTML = '<div class="pac-result-tag">Crédito</div><div class="pac-result-val">-</div>';
       return;
     }
-
-    // ── CRÉDITO: cliente paga parcela sem juros; Elias absorve a taxa ──────
-    var p     = s.parc;
-    var taxa  = TAXAS.credito[p];
-    var desc  = base * taxa;          // taxa que a InfinitePay desconta do Elias
-    var liq   = base - desc;          // o que o Elias recebe líquido
-    var parcC = base / p;             // parcela do cliente (sem juros pro cliente)
 
     el.innerHTML =
-      '<div class="pac-result-tag">Crédito ' + p + 'x · taxa ' + fmtPct(taxa) + ' · ' + lbl + '</div>' +
-      '<div class="pac-result-val">' + p + 'x\u00a0' + fmt(parcC) + '</div>' +
-      '<div class="pac-result-sub" style="display:flex;justify-content:space-between;margin-top:4px">' +
-        '<span>Cliente paga: ' + fmt(base) + ' sem juros</span>' +
-        '<span style="color:rgba(88,117,133,0.9)">Você recebe: ' + fmt(liq) + '</span>' +
+      '<div class="pac-result-tag">CRÉDITO EM ' + p + 'X · TAXA INCLUÍDA</div>' +
+      '<div class="pac-result-val">' + p + 'x de ' + formatCurrency(credit.installment) + '</div>' +
+      '<div class="pac-result-sub" style="display:flex;flex-direction:column;margin-top:6px">' +
+        '<span>Total no cartão: ' + formatCurrency(credit.total) + '</span>' +
+        '<span>Valor-base do plano: ' + formatCurrency(base) + '</span>' +
       '</div>';
   }
 
@@ -573,8 +546,11 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     var periodEl = card.querySelector('.pac-period');
     if (!priceEl || !periodEl) return;
 
-    var base = BASES[id] && BASES[id][idx];
-    if (typeof base !== 'number') return;
+    var planKey = getPlanKey(id);
+    var optionKey = getOptionKey(id, idx);
+    var option = DATA.plans && DATA.plans[planKey] && DATA.plans[planKey].options && DATA.plans[planKey].options[optionKey];
+    if (!option) return;
+    var base = option.base;
     var parts = base.toFixed(2).split('.');
     priceEl.textContent = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
@@ -608,40 +584,40 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   window.simSetMod = function(id, idx, btn) {
     PERIOD[id] = idx;
     SIM[id].mod = idx;
-
     syncSimButtons(id, idx);
-
     var card = btn.closest('.plans-alt-card');
     if (card) {
       syncCardPeriodRows(card, idx);
       updateCardPrice(id, idx, card);
     }
-
     render(id);
+    // table feature removed
   };
 
   window.pacSetMod = function(id, idx, btn) {
     PERIOD[id] = idx;
     SIM[id].mod = idx;
-
     var card = btn.closest('.plans-alt-card');
     if (card) {
       syncCardPeriodRows(card, idx);
       updateCardPrice(id, idx, card);
       syncSimButtons(id, idx);
     }
-
     render(id);
+    // table feature removed
+    // update consultation CTA messaging if relevant
+    if (id === 'consulta') updateConsultaCTA();
   };
 
   window.pacSetMode = function(id, mode, btn) {
-    SIM[id].mode = mode;
+    // only 'pix' or 'credito' supported
+    SIM[id].mode = mode === 'credito' ? 'credito' : 'pix';
     btn.closest('.pac-toggle').querySelectorAll('.pac-mode-btn')
       .forEach(function(b){ b.classList.remove('active'); });
     btn.classList.add('active');
     var pg = document.getElementById('pac-parc-' + id);
-    if (pg) pg.style.display = mode === 'credito' ? 'block' : 'none';
-    if (mode === 'credito') {
+    if (pg) pg.style.display = SIM[id].mode === 'credito' ? 'block' : 'none';
+    if (SIM[id].mode === 'credito') {
       SIM[id].parc = 1;
       document.querySelectorAll('#pac-parc-' + id + ' .pac-parc-btn')
         .forEach(function(b,i){ b.classList.toggle('active', i===0); });
@@ -657,6 +633,23 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     render(id);
   };
 
+  // Table feature removed: buildTable/toggleTable removed to keep UI minimal.
+
+  function updateConsultaCTA() {
+    // Update consultation CTA text and href according to selected option
+    var idx = PERIOD['consulta'];
+    var optionKey = getOptionKey('consulta', idx);
+    var plan = DATA.plans && DATA.plans['consultas'];
+    var option = plan && plan.options && plan.options[optionKey];
+    var cta = document.getElementById('pac-cta-consulta');
+    if (!cta || !option) return;
+    var desc = option.description || option.label || '';
+    var text = encodeURIComponent('Olá Elias! Tenho interesse na ' + desc + '.');
+    cta.href = 'https://wa.me/5585996639595?text=' + text;
+    var label = optionKey === 'retorno' ? 'AGENDAR RETORNO →' : 'AGENDAR CONSULTA ' + (option.label ? option.label.toUpperCase() : '→');
+    cta.textContent = label;
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
     ['lite','vip','consulta'].forEach(function(id) {
       var simSection = document.getElementById('sim-mods-' + id);
@@ -670,5 +663,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       }
       render(id);
     });
+    updateConsultaCTA();
   });
 })();
