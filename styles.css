@@ -2664,3 +2664,511 @@ footer {
   gap: 10px;
   margin-top: 4px;
 }
+/* ══════════════════════════════════════════════════════════════
+   CORREÇÃO FINAL — CARROSSEL DE TRANSFORMAÇÕES
+
+   Mantém:
+   - card atual nítido;
+   - anterior com blur;
+   - próximo com blur;
+   - demais invisíveis;
+   - sem aumentar a largura da página.
+══════════════════════════════════════════════════════════════ */
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden !important;
+}
+
+@supports (overflow: clip) {
+  html,
+  body {
+    overflow-x: clip !important;
+  }
+}
+
+#resultados {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  overflow-x: hidden !important;
+}
+
+@supports (overflow: clip) {
+  #resultados {
+    overflow-x: clip !important;
+  }
+}
+
+#resultados > .container {
+  width: 100%;
+  max-width: 1200px;
+  min-width: 0;
+}
+
+.transf-section,
+.transf-header,
+.transf-nav,
+.transf-viewport,
+.transf-track,
+.transf-card,
+.transf-single,
+.transf-single-footer,
+.transf-footer-left {
+  min-width: 0;
+}
+
+/* Área completa do carrossel */
+
+.transf-section {
+  position: relative;
+
+  width: 100%;
+  max-width: 960px;
+
+  margin: 64px auto 0;
+
+  overflow: visible;
+}
+
+.transf-header {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 28px;
+}
+
+.transf-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 12px;
+
+  flex: 0 1 auto;
+}
+
+.transf-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  gap: 7px;
+
+  max-width: 240px;
+}
+
+/*
+  Esta é a regra principal da correção.
+
+  O viewport precisa esconder o restante do track.
+  As prévias laterais continuam aparecendo dentro dos
+  960px disponíveis, sem criar rolagem horizontal.
+*/
+
+.transf-viewport {
+  position: relative;
+
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0;
+
+  overflow: hidden !important;
+
+  padding: 18px 0 30px;
+
+  touch-action: pan-y;
+  overscroll-behavior-x: contain;
+}
+
+/* Faixa que contém todos os cards */
+
+.transf-track {
+  display: flex !important;
+  align-items: center;
+
+  gap: 20px;
+
+  width: max-content !important;
+  max-width: none !important;
+  min-width: 0;
+
+  margin: 0;
+  padding: 0;
+
+  cursor: grab;
+
+  user-select: none;
+  -webkit-user-select: none;
+
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+.transf-track.dragging {
+  cursor: grabbing;
+  transition: none !important;
+}
+
+/*
+  Estado padrão:
+  os cards distantes continuam presentes no track para
+  preservar o loop, mas não aparecem visualmente.
+*/
+
+.transf-card {
+  position: relative;
+  z-index: 0;
+
+  flex: 0 0 560px !important;
+
+  width: 560px !important;
+  max-width: none !important;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  transform-origin: center center;
+  transform: scale(0.84);
+
+  opacity: 0;
+  filter: blur(5px);
+
+  pointer-events: none;
+
+  transition:
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.45s ease,
+    filter 0.45s ease;
+}
+
+/* Card anterior e próximo */
+
+.transf-card.is-prev,
+.transf-card.is-next {
+  z-index: 1;
+
+  transform: scale(0.90);
+
+  opacity: 0.38;
+  filter: blur(3px);
+
+  pointer-events: none;
+}
+
+/* Card atualmente selecionado */
+
+.transf-card.active {
+  z-index: 3;
+
+  transform: scale(1);
+
+  opacity: 1;
+  filter: blur(0);
+
+  pointer-events: auto;
+}
+
+/* Todos os outros cards */
+
+.transf-card.is-hidden {
+  z-index: 0;
+
+  transform: scale(0.82);
+
+  opacity: 0;
+  filter: blur(5px);
+
+  pointer-events: none;
+}
+
+/* Estrutura visual do card */
+
+.transf-single {
+  position: relative;
+
+  width: 100%;
+  min-width: 0;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(88, 117, 133, 0.16);
+  border-radius: 18px;
+
+  background: #08090b;
+
+  box-shadow:
+    0 20px 56px rgba(1, 4, 11, 0.60),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.transf-card.active .transf-single {
+  border-color: rgba(88, 117, 133, 0.30);
+
+  box-shadow:
+    0 32px 80px rgba(1, 4, 11, 0.78),
+    0 0 0 1px rgba(88, 117, 133, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Imagem completa, sem cortes */
+
+.transf-single > img {
+  display: block;
+
+  width: 100%;
+  height: 520px;
+
+  max-width: 100%;
+  max-height: none;
+
+  object-fit: contain;
+  object-position: center;
+
+  background: #08090b;
+
+  pointer-events: none;
+
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Rodapé do card */
+
+.transf-single-footer {
+  width: 100%;
+  min-width: 0;
+
+  padding: 14px 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 16px;
+
+  border-top: 1px solid rgba(88, 117, 133, 0.12);
+
+  background: rgba(8, 9, 11, 0.94);
+}
+
+.transf-footer-left {
+  flex: 1 1 auto;
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.transf-footer-type,
+.transf-footer-dates {
+  display: block;
+
+  max-width: 100%;
+
+  overflow-wrap: anywhere;
+}
+
+.transf-footer-right {
+  flex: 0 0 auto;
+
+  white-space: nowrap;
+}
+
+/* Notebook e tablet horizontal */
+
+@media (max-width: 1023px) {
+  .transf-section {
+    max-width: 100%;
+  }
+
+  .transf-card {
+    flex: 0 0 min(560px, 78vw) !important;
+
+    width: min(560px, 78vw) !important;
+    max-width: none !important;
+  }
+
+  .transf-single > img {
+    height: min(500px, 62vw);
+    min-height: 390px;
+  }
+}
+
+/* Tablet */
+
+@media (max-width: 768px) {
+  .transf-section {
+    margin-top: 48px !important;
+  }
+
+  .transf-header {
+    align-items: flex-start;
+
+    gap: 18px;
+  }
+
+  .transf-card {
+    flex: 0 0 min(560px, 82vw) !important;
+
+    width: min(560px, 82vw) !important;
+    max-width: none !important;
+  }
+
+  .transf-single > img {
+    height: min(460px, 72vw);
+    min-height: 350px;
+  }
+
+  .transf-footer-right {
+    font-size: 0.84rem;
+  }
+}
+
+/*
+  Celular:
+  somente o card ativo aparece.
+*/
+
+@media (max-width: 600px) {
+  .transf-header {
+    flex-direction: column;
+    align-items: stretch;
+
+    gap: 14px;
+
+    margin-bottom: 20px;
+  }
+
+  .transf-header .t-label {
+    margin-bottom: 0 !important;
+  }
+
+  .transf-nav {
+    width: 100%;
+
+    justify-content: space-between;
+
+    gap: 10px;
+  }
+
+  .transf-dots {
+    flex: 1 1 auto;
+
+    max-width: none;
+
+    gap: 5px;
+  }
+
+  .transf-dot {
+    width: 5px;
+    height: 5px;
+  }
+
+  .transf-dot.active {
+    width: 15px;
+  }
+
+  .transf-viewport {
+    padding: 8px 0 22px;
+  }
+
+  .transf-track {
+    gap: 16px;
+  }
+
+  .transf-card,
+  .transf-card.is-prev,
+  .transf-card.is-next,
+  .transf-card.is-hidden {
+    flex: 0 0 100% !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    transform: none;
+
+    opacity: 0;
+    filter: none;
+
+    pointer-events: none;
+  }
+
+  .transf-card.active {
+    transform: none;
+
+    opacity: 1;
+    filter: none;
+
+    pointer-events: auto;
+  }
+
+  .transf-single {
+    border-radius: 14px;
+  }
+
+  .transf-single > img {
+    width: 100%;
+    height: auto;
+
+    min-height: 0;
+    max-height: none;
+
+    aspect-ratio: 3 / 4;
+
+    object-fit: contain;
+  }
+
+  .transf-single-footer {
+    align-items: flex-start;
+    flex-direction: column;
+
+    gap: 8px;
+
+    padding: 13px 15px;
+  }
+
+  .transf-footer-left,
+  .transf-footer-right {
+    width: 100%;
+  }
+
+  .transf-footer-right {
+    white-space: normal;
+  }
+}
+
+@media (max-width: 380px) {
+  .transf-arrow {
+    width: 38px;
+    height: 38px;
+  }
+
+  .transf-single-footer {
+    padding: 12px 13px;
+  }
+
+  .transf-footer-dates {
+    font-size: 0.61rem;
+  }
+
+  .transf-footer-right {
+    font-size: 0.82rem;
+  }
+}
