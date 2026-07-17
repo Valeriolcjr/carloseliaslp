@@ -617,14 +617,10 @@ const INFINITEPAY_APPROVED_DATA = {
      * =========================================================
      * CONSULTAS
      *
-     * Existem somente duas modalidades:
+     * Existem três modalidades:
      * 1. Consulta
-     * 2. Presencial
-     *
-     * Não existem:
-     * - Retorno;
-     * - Online;
-     * - valor de R$ 299,90.
+     * 2. Retorno
+     * 3. Combo (consulta + retorno)
      * =========================================================
      */
 
@@ -635,7 +631,8 @@ const INFINITEPAY_APPROVED_DATA = {
 
       optionOrder: [
         'consulta',
-        'presencial'
+        'retorno',
+        'combo'
       ],
 
       options: {
@@ -716,19 +713,96 @@ const INFINITEPAY_APPROVED_DATA = {
           }
         },
 
-        presencial: {
-          label: 'Presencial',
+        retorno: {
+          label: 'Retorno',
+
+          base: 299.90,
+
+          description:
+            'consulta de retorno',
+
+          ctaLabel:
+            'AGENDAR RETORNO →',
+
+          whatsappText:
+            'Olá Elias! Tenho interesse em agendar um retorno.',
+
+          credit: {
+            1: {
+              total: 313.04,
+              installment: 313.04
+            },
+
+            2: {
+              total: 319.35,
+              installment: 159.68
+            },
+
+            3: {
+              total: 322.49,
+              installment: 107.50
+            },
+
+            4: {
+              total: 325.63,
+              installment: 81.41
+            },
+
+            5: {
+              total: 328.84,
+              installment: 65.77
+            },
+
+            6: {
+              total: 332.00,
+              installment: 55.33
+            },
+
+            7: {
+              total: 343.00,
+              installment: 49.00
+            },
+
+            8: {
+              total: 346.28,
+              installment: 43.29
+            },
+
+            9: {
+              total: 349.62,
+              installment: 38.85
+            },
+
+            10: {
+              total: 352.97,
+              installment: 35.30
+            },
+
+            11: {
+              total: 356.39,
+              installment: 32.40
+            },
+
+            12: {
+              total: 359.88,
+              installment: 29.99
+            }
+          }
+        },
+
+        combo: {
+          label: 'Combo',
 
           base: 549.90,
 
           description:
-            'atendimento presencial',
+            'consulta + retorno',
 
           ctaLabel:
-            'AGENDAR CONSULTA PRESENCIAL →',
+            'AGENDAR COMBO →',
 
           whatsappText:
-            'Olá Elias! Tenho interesse na consulta presencial.',
+            'Olá Elias! Tenho interesse no combo de consulta + retorno.',
 
           credit: {
             1: {

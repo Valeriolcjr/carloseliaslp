@@ -36,11 +36,11 @@
 }
 </script>
 
-<link rel="stylesheet" href="styles.css?v=20260717-8">
+<link rel="stylesheet" href="styles.css?v=20260717-12">
 </head>
 <body>
 
-<!-- VERSÃO: carrossel com 9 transformações — 17/07/2026 -->
+<!-- VERSÃO: carrossel com 9 transformações + consultas atualizadas — 17/07/2026 -->
 
 <!-- WHATSAPP FLOAT -->
 <a href="https://wa.me/5585996639595?text=Ol%C3%A1%20Elias%2C%20quero%20saber%20mais%20sobre%20o%20acompanhamento%20nutricional%21" target="_blank" rel="noopener" class="wa-float" aria-label="Falar no WhatsApp">
@@ -224,7 +224,7 @@
           "O problema nunca foi esforço. Foi falta de clareza."
         </blockquote>
         <p class="t-body sobre-text reveal">
-          Nutricionista com atuação em nutrição esportiva, hipertrofia, endurance e composição corporal. Pós-graduado em Nutrição Esportiva e Hipertrofia pela UNIGUAÇU. Estratégias baseadas em ciência, prática clínica e individualização real — sem dietas prontas, sem protocolos genéricos.
+          Nutricionista com atuação em nutrição esportiva, hipertrofia, endurance e composição corporal. Pós-graduado em Nutrição Esportiva e Hipertrofia pela UNIGUAÇU. Estratégias baseadas em ciência, prática clínica e individualização real,sem dietas prontas e sem protocolos genéricos.
         </p>
         <div class="sobre-credentials reveal">
           <div class="cred-item glass">
@@ -798,18 +798,18 @@
           </div>
         </div>
       </div>
-      <div class="plans-alt-card">
-        <div class="pac-inner">
-          <p class="pac-label">CONSULTAS</p>
-          <span class="pac-delta neutral">Por sessão</span>
+      <div class="plans-alt-card plans-alt-card--consulta">
+  <div class="pac-inner">
+    <p class="pac-label">CONSULTAS</p>
+<span class="pac-delta neutral">Por sessão</span>
 
-          <div class="pac-price-row">
-            <span class="pac-currency">R$</span>
-            <span class="pac-amount">349</span>
-            <span class="pac-period">,90</span>
-          </div>
+<div class="pac-price-row">
+  <span class="pac-currency">R$</span>
+  <span class="pac-amount">349</span>
+  <span class="pac-period">,90/sessão</span>
+</div>
 
-          <div class="pac-equiv">consulta nutricional</div>
+<div class="pac-equiv">escolha entre consulta, retorno ou combo</div>
 
           <div class="pac-spark">
             <svg viewBox="0 0 180 50" fill="none" aria-hidden="true">
@@ -847,7 +847,17 @@
               onclick="pacSetMod('consulta',1,this)"
               aria-pressed="false"
             >
-              <span class="pac-period-name">Presencial</span>
+              <span class="pac-period-name">Retorno</span>
+              <span class="pac-period-val">R$ 299,90</span>
+            </button>
+
+            <button
+              type="button"
+              class="pac-period-row"
+              onclick="pacSetMod('consulta',2,this)"
+              aria-pressed="false"
+            >
+              <span class="pac-period-name">Combo (consulta + retorno)</span>
               <span class="pac-period-val">R$ 549,90</span>
             </button>
           </div>
@@ -874,7 +884,16 @@
                 onclick="simSetMod('consulta',1,this)"
                 aria-pressed="false"
               >
-                Presencial
+                Retorno
+              </button>
+
+              <button
+                type="button"
+                class="pac-sim-mod-btn"
+                onclick="simSetMod('consulta',2,this)"
+                aria-pressed="false"
+              >
+                Combo
               </button>
             </div>
 
@@ -915,7 +934,11 @@
               </div>
             </div>
 
-            <div class="pac-result" id="pac-result-consulta"></div>
+            <div
+              class="pac-result"
+              id="pac-result-consulta"
+              aria-live="polite"
+            ></div>
           </div>
 
           <div class="pac-cta">
@@ -929,6 +952,7 @@
               AGENDAR CONSULTA →
             </a>
           </div>
+
         </div>
       </div>
     </div>
@@ -1035,6 +1059,47 @@
           <div class="faq-a-inner" itemprop="text">O Dietbox é um app de nutrição onde seu plano alimentar é entregue de forma organizada. Você acessa via celular, visualiza as refeições, registra o que come e acompanha a evolução. Simples, prático e integrado ao acompanhamento.</div>
         </div>
       </div>
+      <div
+  class="faq-item reveal reveal-delay-1"
+  itemscope
+  itemprop="mainEntity"
+  itemtype="https://schema.org/Question"
+>
+  <button
+    type="button"
+    class="faq-q"
+    onclick="toggleFaq(this)"
+    aria-expanded="false"
+  >
+    <span
+      class="faq-q-text"
+      itemprop="name"
+    >
+      O que é o feedback?
+    </span>
+
+    <span
+      class="faq-icon"
+      aria-hidden="true"
+    >
+      +
+    </span>
+  </button>
+
+  <div
+    class="faq-a"
+    itemscope
+    itemprop="acceptedAnswer"
+    itemtype="https://schema.org/Answer"
+  >
+    <div
+      class="faq-a-inner"
+      itemprop="text"
+    >
+      O feedback é o que define o acompanhamento. Basicamente, ele consiste no envio de fotos e nas respostas a perguntas realizadas semanalmente ou mensalmente, de acordo com o plano contratado. Dessa forma, o nutricionista consegue acompanhar de perto a sua evolução, realizar os ajustes necessários e garantir o melhor cumprimento do plano.
+    </div>
+  </div>
+</div>  
 
       <div class="faq-item reveal reveal-delay-1" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
         <button type="button" class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
@@ -1359,7 +1424,7 @@
 
 
 
-<script src="tabelas-infinitepay-elias.js?v=20260717-8"></script>
-<script src="scripts.js?v=20260717-8"></script>
+<script src="tabelas-infinitepay-elias.js?v=20260717-12"></script>
+<script src="scripts.js?v=20260717-12"></script>
 </body>
 </html>

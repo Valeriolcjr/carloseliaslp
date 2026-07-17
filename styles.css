@@ -226,7 +226,7 @@ select:focus-visible {
   .nav-inner { justify-content: space-between; gap: 12px; }
 }
 
-/* ─── /* ─── HERO ─── */
+/* ─── HERO ─── */
 #hero {
   min-height: 100vh;
   display: flex;
@@ -3225,4 +3225,177 @@ footer {
 .transf-card.is-next {
   opacity: 0.42;
   filter: blur(4px);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CONSULTAS — 3 MODALIDADES
+
+   Compatível com:
+   0 = Consulta
+   1 = Retorno
+   2 = Combo (consulta + retorno)
+══════════════════════════════════════════════════════════════ */
+
+/* Mantém Consulta, Retorno e Combo alinhados em uma única linha. */
+#sim-mods-consulta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+#sim-mods-consulta .pac-sim-mod-btn {
+  width: 100%;
+  min-width: 0;
+  min-height: 34px;
+  padding: 6px 4px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 0.5rem;
+  line-height: 1.15;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* Evita quebra ou sobreposição no nome longo do Combo. */
+.plans-alt-card:nth-child(3) .pac-period-row {
+  gap: 12px;
+  min-width: 0;
+}
+
+.plans-alt-card:nth-child(3) .pac-period-name {
+  flex: 1 1 auto;
+  min-width: 0;
+
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.plans-alt-card:nth-child(3) .pac-period-val {
+  flex: 0 0 auto;
+
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Organiza as duas informações do resultado do crédito. */
+.pac-result-sub span {
+  display: block;
+}
+
+/* Tablet e celular. */
+@media (max-width: 480px) {
+  #sim-mods-consulta {
+    gap: 3px;
+  }
+
+  #sim-mods-consulta .pac-sim-mod-btn {
+    min-height: 32px;
+    padding: 5px 3px;
+    font-size: 0.47rem;
+    letter-spacing: 0.035em;
+  }
+
+  .plans-alt-card:nth-child(3) .pac-period-row {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 360px) {
+  #sim-mods-consulta .pac-sim-mod-btn {
+    font-size: 0.44rem;
+    letter-spacing: 0.025em;
+  }
+
+  .plans-alt-card:nth-child(3) .pac-period-row {
+    padding-right: 10px;
+    padding-left: 10px;
+    gap: 8px;
+  }
+
+  .plans-alt-card:nth-child(3) .pac-period-name,
+  .plans-alt-card:nth-child(3) .pac-period-val {
+    font-size: 0.61rem;
+  }
+}
+/* ══════════════════════════════════════════════════════════════
+   PADRONIZAÇÃO VERTICAL DOS CARDS DE PLANOS
+══════════════════════════════════════════════════════════════ */
+
+/*
+  Todas as opções passam a possuir a mesma altura mínima.
+  Isso evita diferenças causadas pelo tamanho do texto.
+*/
+.plans-alt-card .pac-period-row {
+  min-height: 42px;
+}
+
+/*
+  Lite e VIP possuem quatro opções.
+  Consultas possui apenas três.
+
+  O pseudo-elemento abaixo funciona como uma quarta linha
+  invisível, preservando exatamente o mesmo espaço vertical
+  antes do simulador InfinitePay.
+*/
+.plans-alt-card--consulta .pac-periods::after {
+  content: "";
+  display: block;
+  min-height: 42px;
+  flex: 0 0 42px;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/*
+  Mantém a área do simulador alinhada e impede variações
+  provocadas pelo conteúdo anterior.
+*/
+.plans-alt-card .pac-sim {
+  flex-shrink: 0;
+}
+
+/*
+  Preserva o texto do Combo na mesma linha em telas grandes.
+*/
+.plans-alt-card--consulta .pac-period-name {
+  white-space: nowrap;
+}
+
+/*
+  Em celulares estreitos, o texto pode quebrar naturalmente
+  para não ultrapassar a largura do card.
+*/
+@media (max-width: 480px) {
+  .plans-alt-card--consulta .pac-period-name {
+    white-space: normal;
+  }
+
+  .plans-alt-card--consulta .pac-periods::after {
+    min-height: 42px;
+    flex-basis: 42px;
+  }
+}
+/* ALINHAMENTO DOS TEXTOS DO CARD CONSULTAS */
+.plans-alt-grid .plans-alt-card:nth-child(3) .pac-period-row {
+  text-align: left;
+}
+
+.plans-alt-grid .plans-alt-card:nth-child(3) .pac-period-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: left;
+}
+
+.plans-alt-grid .plans-alt-card:nth-child(3) .pac-period-val {
+  flex: 0 0 auto;
+  margin-left: 16px;
+  text-align: right;
+  white-space: nowrap;
 }

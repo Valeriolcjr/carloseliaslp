@@ -1570,31 +1570,25 @@ document
 
 // ═════════════════════════════════════════════════════════════
 // SIMULADOR INFINITEPAY
-//
 // Fonte de verdade: tabelas-infinitepay-elias.js
-//
-// Consulta:
-// 0 = Consulta
-// 1 = Presencial
+// Consulta: 0 = Consulta | 1 = Retorno | 2 = Combo
 // ═════════════════════════════════════════════════════════════
 (function () {
   'use strict';
 
   if (
-    typeof INFINITEPAY_APPROVED_DATA ===
-      'undefined' ||
+    typeof INFINITEPAY_APPROVED_DATA === 'undefined' ||
     !INFINITEPAY_APPROVED_DATA.plans
   ) {
     console.error(
       'Dados comerciais da InfinitePay não foram carregados. ' +
-        'Carregue tabelas-infinitepay-elias.js antes de scripts.js.'
+      'Carregue tabelas-infinitepay-elias.js antes de scripts.js.'
     );
 
     return;
   }
 
-  var DATA =
-    INFINITEPAY_APPROVED_DATA;
+  var DATA = INFINITEPAY_APPROVED_DATA;
 
   var FALLBACK_OPTION_KEYS = {
     lite: [
@@ -1613,7 +1607,8 @@ document
 
     consulta: [
       'consulta',
-      'presencial'
+      'retorno',
+      'combo'
     ]
   };
 
@@ -1638,39 +1633,37 @@ document
   };
 
   var PERIOD_SUFFIX = {
-    lite: {
-      mensal: '/mês',
-      trimestral: '/3 meses',
-      semestral: '/6 meses',
-      anual: '/ano'
-    },
+  lite: {
+    mensal: '/mês',
+    trimestral: '/3 meses',
+    semestral: '/6 meses',
+    anual: '/ano'
+  },
 
-    vip: {
-      mensal: '/mês',
-      trimestral: '/3 meses',
-      semestral: '/6 meses',
-      anual: '/ano'
-    },
+  vip: {
+    mensal: '/mês',
+    trimestral: '/3 meses',
+    semestral: '/6 meses',
+    anual: '/ano'
+  },
 
-    consulta: {
-      consulta: '',
-      presencial: ''
+  consulta: {
+    consulta: '/sessão',
+    retorno: '/sessão',
+    combo: '/sessão'
+  }
+};
+
+  var currencyFormatter = new Intl.NumberFormat(
+    'pt-BR',
+    {
+      style: 'currency',
+      currency: 'BRL'
     }
-  };
-
-  var currencyFormatter =
-    new Intl.NumberFormat(
-      'pt-BR',
-      {
-        style: 'currency',
-        currency: 'BRL'
-      }
-    );
+  );
 
   function formatCurrency(value) {
-    return currencyFormatter.format(
-      value
-    );
+    return currencyFormatter.format(value);
   }
 
   function getPlan(id) {
@@ -1682,36 +1675,28 @@ document
 
     if (
       plan &&
-      Array.isArray(
-        plan.optionOrder
-      )
+      Array.isArray(plan.optionOrder)
     ) {
       return plan.optionOrder;
     }
 
-    return (
-      FALLBACK_OPTION_KEYS[id] ||
-      []
-    );
+    return FALLBACK_OPTION_KEYS[id] || [];
   }
 
   function resolveOptionKey(
     id,
     selection
   ) {
-    var keys =
-      getOptionKeys(id);
+    var keys = getOptionKeys(id);
 
     if (
-      typeof selection ===
-      'number'
+      typeof selection === 'number'
     ) {
       return keys[selection];
     }
 
     if (
-      typeof selection ===
-        'string' &&
+      typeof selection === 'string' &&
       /^\d+$/.test(selection)
     ) {
       return keys[
@@ -1735,17 +1720,18 @@ document
     }
 
     return (
-      plan.options[
-        state.option
-      ] ||
+      plan.options[state.option] ||
       null
     );
   }
 
-  function getCard(id, source) {
+  function getCard(
+    id,
+    source
+  ) {
     if (
       source &&
-      source.closest
+      typeof source.closest === 'function'
     ) {
       var sourceCard =
         source.closest(
@@ -1775,8 +1761,7 @@ document
   ) {
     if (!card) return;
 
-    var option =
-      getOption(id);
+    var option = getOption(id);
 
     if (!option) return;
 
@@ -1802,12 +1787,8 @@ document
 
     var suffix =
       PERIOD_SUFFIX[id] &&
-      PERIOD_SUFFIX[id][
-        SIM[id].option
-      ]
-        ? PERIOD_SUFFIX[id][
-            SIM[id].option
-          ]
+      PERIOD_SUFFIX[id][SIM[id].option]
+        ? PERIOD_SUFFIX[id][SIM[id].option]
         : '';
 
     if (amountElement) {
@@ -1851,7 +1832,10 @@ document
         '.pac-period-row'
       )
       .forEach(
-        function (row, index) {
+        function (
+          row,
+          index
+        ) {
           var active =
             index ===
             selectedIndex;
@@ -1890,7 +1874,10 @@ document
         '.pac-sim-mod-btn'
       )
       .forEach(
-        function (button, index) {
+        function (
+          button,
+          index
+        ) {
           var active =
             index ===
             selectedIndex;
@@ -1918,11 +1905,14 @@ document
     document
       .querySelectorAll(
         '#pac-parc-' +
-          id +
-          ' .pac-parc-btn'
+        id +
+        ' .pac-parc-btn'
       )
       .forEach(
-        function (button, index) {
+        function (
+          button,
+          index
+        ) {
           var active =
             index === 0;
 
@@ -1943,9 +1933,7 @@ document
 
   function updateConsultaCTA() {
     var option =
-      getOption(
-        'consulta'
-      );
+      getOption('consulta');
 
     var cta =
       document.getElementById(
@@ -1967,7 +1955,7 @@ document
       'https://wa.me/5585996639595?text=' +
       encodeURIComponent(
         option.whatsappText ||
-          'Olá Elias! Tenho interesse na consulta.'
+        'Olá Elias! Tenho interesse na consulta.'
       );
   }
 
@@ -2069,7 +2057,10 @@ document
       '</div>';
   }
 
-  function refresh(id, source) {
+  function refresh(
+    id,
+    source
+  ) {
     var card =
       getCard(
         id,
@@ -2090,9 +2081,51 @@ document
 
     render(id);
 
-    if (id === 'consulta') {
+    if (
+      id === 'consulta'
+    ) {
       updateConsultaCTA();
     }
+  }
+
+  function setOption(
+    id,
+    selection,
+    button,
+    errorLabel
+  ) {
+    var plan = getPlan(id);
+
+    var optionKey =
+      resolveOptionKey(
+        id,
+        selection
+      );
+
+    if (
+      !SIM[id] ||
+      !plan ||
+      !plan.options ||
+      !plan.options[optionKey]
+    ) {
+      console.error(
+        errorLabel + ':',
+        id,
+        selection
+      );
+
+      return;
+    }
+
+    SIM[id].option =
+      optionKey;
+
+    resetInstallments(id);
+
+    refresh(
+      id,
+      button || null
+    );
   }
 
   window.pacSetMod =
@@ -2101,40 +2134,11 @@ document
       selection,
       button
     ) {
-      var plan =
-        getPlan(id);
-
-      var optionKey =
-        resolveOptionKey(
-          id,
-          selection
-        );
-
-      if (
-        !SIM[id] ||
-        !plan ||
-        !plan.options ||
-        !plan.options[
-          optionKey
-        ]
-      ) {
-        console.error(
-          'Opção inválida:',
-          id,
-          selection
-        );
-
-        return;
-      }
-
-      SIM[id].option =
-        optionKey;
-
-      resetInstallments(id);
-
-      refresh(
+      setOption(
         id,
-        button
+        selection,
+        button,
+        'Opção inválida'
       );
     };
 
@@ -2144,40 +2148,11 @@ document
       selection,
       button
     ) {
-      var plan =
-        getPlan(id);
-
-      var optionKey =
-        resolveOptionKey(
-          id,
-          selection
-        );
-
-      if (
-        !SIM[id] ||
-        !plan ||
-        !plan.options ||
-        !plan.options[
-          optionKey
-        ]
-      ) {
-        console.error(
-          'Modalidade inválida:',
-          id,
-          selection
-        );
-
-        return;
-      }
-
-      SIM[id].option =
-        optionKey;
-
-      resetInstallments(id);
-
-      refresh(
+      setOption(
         id,
-        button
+        selection,
+        button,
+        'Modalidade inválida'
       );
     };
 
@@ -2187,7 +2162,12 @@ document
       mode,
       button
     ) {
-      if (!SIM[id]) return;
+      if (
+        !SIM[id] ||
+        !button
+      ) {
+        return;
+      }
 
       SIM[id].mode =
         mode === 'credito'
@@ -2205,9 +2185,12 @@ document
             '.pac-mode-btn'
           )
           .forEach(
-            function (modeButton) {
+            function (
               modeButton
-                .classList.remove(
+            ) {
+              modeButton
+                .classList
+                .remove(
                   'active'
                 );
 
@@ -2236,15 +2219,13 @@ document
 
       if (installments) {
         installments.style.display =
-          SIM[id].mode ===
-            'credito'
+          SIM[id].mode === 'credito'
             ? 'block'
             : 'none';
       }
 
       if (
-        SIM[id].mode ===
-        'credito'
+        SIM[id].mode === 'credito'
       ) {
         resetInstallments(id);
       }
@@ -2258,7 +2239,12 @@ document
       installmentNumber,
       button
     ) {
-      if (!SIM[id]) return;
+      if (
+        !SIM[id] ||
+        !button
+      ) {
+        return;
+      }
 
       SIM[id].parc =
         Number(
@@ -2277,9 +2263,11 @@ document
           )
           .forEach(
             function (item) {
-              item.classList.remove(
-                'active'
-              );
+              item
+                .classList
+                .remove(
+                  'active'
+                );
 
               item.setAttribute(
                 'aria-pressed',
@@ -2306,46 +2294,49 @@ document
       'lite',
       'vip',
       'consulta'
-    ].forEach(function (id) {
-      var plan =
-        getPlan(id);
+    ].forEach(
+      function (id) {
+        var plan =
+          getPlan(id);
 
-      if (
-        !plan ||
-        !SIM[id]
-      ) {
-        return;
+        if (
+          !plan ||
+          !SIM[id]
+        ) {
+          return;
+        }
+
+        if (
+          plan.defaultOption &&
+          plan.options &&
+          plan.options[
+            plan.defaultOption
+          ]
+        ) {
+          SIM[id].option =
+            plan.defaultOption;
+        }
+
+        SIM[id].mode = 'pix';
+        SIM[id].parc = 1;
+
+        refresh(
+          id,
+          null
+        );
       }
-
-      if (
-        plan.defaultOption &&
-        plan.options &&
-        plan.options[
-          plan.defaultOption
-        ]
-      ) {
-        SIM[id].option =
-          plan.defaultOption;
-      }
-
-      SIM[id].mode = 'pix';
-      SIM[id].parc = 1;
-
-      refresh(
-        id,
-        null
-      );
-    });
+    );
   }
 
   if (
-    document.readyState ===
-    'loading'
+    document.readyState === 'loading'
   ) {
     document.addEventListener(
       'DOMContentLoaded',
       initialize,
-      { once: true }
+      {
+        once: true
+      }
     );
   } else {
     initialize();
