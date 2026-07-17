@@ -1,263 +1,222 @@
-﻿// ── HERO PHOTO: injeção via JS — evita parse lento de base64 inline
-(function() {
-  var mob =
+﻿// ─────────────────────────────────────────────────────────────
+// HERO PHOTO
+// ─────────────────────────────────────────────────────────────
+(function () {
+  var image = document.getElementById('heroImg');
+
+  if (!image) return;
+
+  var isMobile =
     window.innerWidth < 768 ||
     /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-  var img = document.getElementById('heroImg');
-
-  if (!img) return;
-
-  img.src = mob
+  image.src = isMobile
     ? 'assets/images/image_6_2520acbf46.jpg'
     : 'assets/images/image_7_d17f1147ea.jpg';
 })();
 
-/* ════════════════════════════════════════════════════════════ */
-
-// ── NAVBAR SCROLL
+// ─────────────────────────────────────────────────────────────
+// NAVBAR
+// ─────────────────────────────────────────────────────────────
 window.addEventListener(
   'scroll',
-  function() {
+  function () {
     var navbar = document.getElementById('navbar');
 
     if (!navbar) return;
 
-    navbar.classList.toggle(
-      'scrolled',
-      window.scrollY > 20
-    );
+    navbar.classList.toggle('scrolled', window.scrollY > 20);
   },
   { passive: true }
 );
 
-// ── HERO: animação de entrada
-(function() {
+// ─────────────────────────────────────────────────────────────
+// HERO: ANIMAÇÃO DE ENTRADA
+// ─────────────────────────────────────────────────────────────
+(function () {
   var content = document.getElementById('heroContent');
-  var img = document.getElementById('heroImg');
+  var image = document.getElementById('heroImg');
+  var triggered = false;
 
   if (!content) return;
 
   function triggerHero() {
-    requestAnimationFrame(function() {
-      setTimeout(function() {
+    if (triggered) return;
+
+    triggered = true;
+
+    requestAnimationFrame(function () {
+      setTimeout(function () {
         content.classList.add('hero-animated');
       }, 80);
     });
   }
 
-  if (img && img.complete) {
+  if (image && image.complete) {
     triggerHero();
-  } else if (img) {
-    img.addEventListener('load', triggerHero);
+  } else if (image) {
+    image.addEventListener('load', triggerHero, { once: true });
     setTimeout(triggerHero, 400);
   } else {
     triggerHero();
   }
 })();
 
-// ── MOBILE MENU
+// ─────────────────────────────────────────────────────────────
+// MENU MOBILE
+// ─────────────────────────────────────────────────────────────
 function toggleMenu() {
-  var mobileMenu =
-    document.getElementById('mobileMenu');
+  var menu = document.getElementById('mobileMenu');
+  var button = document.querySelector('.hamburger');
 
-  if (!mobileMenu) return;
+  if (!menu) return;
 
-  var open =
-    mobileMenu.classList.toggle('open');
+  var isOpen = menu.classList.toggle('open');
 
-  mobileMenu.setAttribute(
+  menu.setAttribute(
     'aria-hidden',
-    (!open).toString()
+    isOpen ? 'false' : 'true'
   );
-
-  var button =
-    document.querySelector('.hamburger');
 
   if (button) {
     button.setAttribute(
       'aria-expanded',
-      open ? 'true' : 'false'
+      isOpen ? 'true' : 'false'
     );
   }
 }
 
 function closeMenu() {
-  var mobileMenu =
-    document.getElementById('mobileMenu');
+  var menu = document.getElementById('mobileMenu');
+  var button = document.querySelector('.hamburger');
 
-  if (!mobileMenu) return;
+  if (!menu) return;
 
-  mobileMenu.classList.remove('open');
-
-  mobileMenu.setAttribute(
-    'aria-hidden',
-    'true'
-  );
-
-  var button =
-    document.querySelector('.hamburger');
+  menu.classList.remove('open');
+  menu.setAttribute('aria-hidden', 'true');
 
   if (button) {
-    button.setAttribute(
-      'aria-expanded',
-      'false'
-    );
+    button.setAttribute('aria-expanded', 'false');
   }
 }
 
-// ── REVEAL ON SCROLL
-var revealElements =
-  document.querySelectorAll('.reveal');
+// ─────────────────────────────────────────────────────────────
+// REVEAL ON SCROLL
+// ─────────────────────────────────────────────────────────────
+(function () {
+  var elements = document.querySelectorAll('.reveal');
 
-if ('IntersectionObserver' in window) {
-  var revealObserver =
-    new IntersectionObserver(
-      function(entries) {
-        entries.forEach(function(entry) {
-          if (!entry.isIntersecting) return;
-
-          entry.target.classList.add('visible');
-
-          revealObserver.unobserve(
-            entry.target
-          );
-        });
-      },
-      {
-        threshold: 0.12,
-        rootMargin: '0px 0px -40px 0px'
-      }
-    );
-
-  revealElements.forEach(function(element) {
-    revealObserver.observe(element);
-  });
-} else {
-  revealElements.forEach(function(element) {
-    element.classList.add('visible');
-  });
-}
-
-// ── LOGO SOBRE: animação draw + fill + float
-(function() {
-  var logo =
-    document.getElementById('sobreLogo');
-
-  var tagline =
-    document.getElementById('sobreTagline');
-
-  var logoColumn =
-    document.getElementById('sobreLogoCol');
-
-  if (!logo) return;
-
-  var parts = [
-    'lp1',
-    'lp2',
-    'lp3',
-    'lp4'
-  ];
-
-  var delays = [
-    0,
-    220,
-    380,
-    540
-  ];
+  if (!elements.length) return;
 
   if (!('IntersectionObserver' in window)) {
-    parts.forEach(function(id) {
-      var element =
-        document.getElementById(id);
-
-      if (element) {
-        element.classList.add('drawn');
-      }
+    elements.forEach(function (element) {
+      element.classList.add('visible');
     });
-
-    logo.classList.add('animated');
-
-    if (tagline) {
-      tagline.classList.add('animated');
-    }
-
-    if (logoColumn) {
-      logoColumn.classList.add('animated');
-    }
 
     return;
   }
 
-  var logoObserver =
-    new IntersectionObserver(
-      function(entries) {
-        if (!entries[0].isIntersecting) {
-          return;
-        }
+  var observer = new IntersectionObserver(
+    function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
 
-        logoObserver.disconnect();
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      });
+    },
+    {
+      threshold: 0.12,
+      rootMargin: '0px 0px -40px 0px'
+    }
+  );
 
-        parts.forEach(function(id, index) {
-          var element =
-            document.getElementById(id);
-
-          if (!element) return;
-
-          setTimeout(function() {
-            element.classList.add('drawn');
-          }, delays[index]);
-        });
-
-        setTimeout(function() {
-          logo.classList.add('animated');
-        }, 1000);
-
-        if (tagline) {
-          setTimeout(function() {
-            tagline.classList.add('animated');
-          }, 1100);
-        }
-
-        var tags =
-          document.getElementById('sobreTags');
-
-        if (tags) {
-          setTimeout(function() {
-            tags.classList.add('animated');
-          }, 1400);
-        }
-
-        if (logoColumn) {
-          setTimeout(function() {
-            logoColumn.classList.add(
-              'animated'
-            );
-          }, 400);
-        }
-      },
-      {
-        threshold: 0.25
-      }
-    );
-
-  logoObserver.observe(logo);
+  elements.forEach(function (element) {
+    observer.observe(element);
+  });
 })();
 
-// ── FAQ ACCORDION
+// ─────────────────────────────────────────────────────────────
+// LOGO DA SEÇÃO SOBRE
+// ─────────────────────────────────────────────────────────────
+(function () {
+  var logo = document.getElementById('sobreLogo');
+  var tagline = document.getElementById('sobreTagline');
+  var logoColumn = document.getElementById('sobreLogoCol');
+  var tags = document.getElementById('sobreTags');
+
+  if (!logo) return;
+
+  var parts = ['lp1', 'lp2', 'lp3', 'lp4'];
+  var delays = [0, 220, 380, 540];
+
+  function animateLogo() {
+    parts.forEach(function (id, index) {
+      var element = document.getElementById(id);
+
+      if (!element) return;
+
+      setTimeout(function () {
+        element.classList.add('drawn');
+      }, delays[index]);
+    });
+
+    setTimeout(function () {
+      logo.classList.add('animated');
+    }, 1000);
+
+    if (tagline) {
+      setTimeout(function () {
+        tagline.classList.add('animated');
+      }, 1100);
+    }
+
+    if (tags) {
+      setTimeout(function () {
+        tags.classList.add('animated');
+      }, 1400);
+    }
+
+    if (logoColumn) {
+      setTimeout(function () {
+        logoColumn.classList.add('animated');
+      }, 400);
+    }
+  }
+
+  if (!('IntersectionObserver' in window)) {
+    animateLogo();
+    return;
+  }
+
+  var observer = new IntersectionObserver(
+    function (entries) {
+      if (!entries[0].isIntersecting) return;
+
+      observer.disconnect();
+      animateLogo();
+    },
+    {
+      threshold: 0.25
+    }
+  );
+
+  observer.observe(logo);
+})();
+
+// ─────────────────────────────────────────────────────────────
+// FAQ
+// ─────────────────────────────────────────────────────────────
 function toggleFaq(button) {
   var item = button.parentElement;
-
-  var isOpen =
-    item.classList.contains('open');
+  var wasOpen = item.classList.contains('open');
 
   document
     .querySelectorAll('.faq-item.open')
-    .forEach(function(openItem) {
+    .forEach(function (openItem) {
       openItem.classList.remove('open');
 
-      var question =
-        openItem.querySelector('.faq-q');
+      var question = openItem.querySelector('.faq-q');
 
       if (question) {
         question.setAttribute(
@@ -267,7 +226,7 @@ function toggleFaq(button) {
       }
     });
 
-  if (!isOpen) {
+  if (!wasOpen) {
     item.classList.add('open');
 
     button.setAttribute(
@@ -277,7 +236,9 @@ function toggleFaq(button) {
   }
 }
 
-// ── PLAN SELECTOR LEGADO
+// ─────────────────────────────────────────────────────────────
+// SELETOR DE PLANOS LEGADO
+// ─────────────────────────────────────────────────────────────
 function selectPlan(
   planId,
   period,
@@ -285,14 +246,13 @@ function selectPlan(
   equivalent,
   element
 ) {
-  var card =
-    element.closest('.plan-card');
+  var card = element.closest('.plan-card');
 
   if (!card) return;
 
   card
     .querySelectorAll('.plan-option')
-    .forEach(function(option) {
+    .forEach(function (option) {
       option.classList.remove('selected');
     });
 
@@ -318,14 +278,17 @@ function selectPlan(
   }
 }
 
-// ── FORM SUBMIT → WHATSAPP + BACKUP LOCAL
-var leadForm =
-  document.getElementById('leadForm');
+// ─────────────────────────────────────────────────────────────
+// FORMULÁRIO → WHATSAPP + BACKUP LOCAL
+// ─────────────────────────────────────────────────────────────
+(function () {
+  var form = document.getElementById('leadForm');
 
-if (leadForm) {
-  leadForm.addEventListener(
+  if (!form) return;
+
+  form.addEventListener(
     'submit',
-    function(event) {
+    function (event) {
       event.preventDefault();
 
       var nameInput =
@@ -369,7 +332,7 @@ if (leadForm) {
         return;
       }
 
-      var leads;
+      var leads = [];
 
       try {
         leads = JSON.parse(
@@ -385,7 +348,7 @@ if (leadForm) {
         leads = [];
       }
 
-      var lead = {
+      leads.unshift({
         id: Date.now(),
         nome: nome,
         whatsapp: whatsapp,
@@ -393,9 +356,7 @@ if (leadForm) {
         mensagem: mensagem,
         data: new Date().toISOString(),
         status: 'novo'
-      };
-
-      leads.unshift(lead);
+      });
 
       try {
         localStorage.setItem(
@@ -409,27 +370,20 @@ if (leadForm) {
         );
       }
 
-      var objectiveText =
-        'Objetivo: ' +
-        objetivo +
-        '. ';
-
-      var messageText =
-        mensagem
-          ? '\n\n' + mensagem
-          : '';
-
-      var text =
-        encodeURIComponent(
-          'Olá Elias! Me chamo ' +
+      var text = encodeURIComponent(
+        'Olá Elias! Me chamo ' +
           nome +
           '. Meu WhatsApp é ' +
           whatsapp +
-          '. ' +
-          objectiveText +
-          'Entrei em contato pelo site.' +
-          messageText
-        );
+          '. Objetivo: ' +
+          objetivo +
+          '. Entrei em contato pelo site.' +
+          (
+            mensagem
+              ? '\n\n' + mensagem
+              : ''
+          )
+      );
 
       showFeedback(
         'Mensagem registrada. Abrindo WhatsApp...',
@@ -438,15 +392,15 @@ if (leadForm) {
 
       window.open(
         'https://wa.me/5585996639595?text=' +
-        text,
+          text,
         '_blank',
         'noopener'
       );
 
-      leadForm.reset();
+      form.reset();
     }
   );
-}
+})();
 
 function showFeedback(message, type) {
   var element =
@@ -474,18 +428,20 @@ function showFeedback(message, type) {
       ? '#4ade80'
       : '#f87171';
 
-  setTimeout(function() {
+  setTimeout(function () {
     element.style.display = 'none';
   }, 5000);
 }
 
-// ── SMOOTH SCROLL PARA LINKS INTERNOS
+// ─────────────────────────────────────────────────────────────
+// LINKS INTERNOS
+// ─────────────────────────────────────────────────────────────
 document
   .querySelectorAll('a[href^="#"]')
-  .forEach(function(anchor) {
+  .forEach(function (anchor) {
     anchor.addEventListener(
       'click',
-      function(event) {
+      function (event) {
         var href =
           anchor.getAttribute('href');
 
@@ -511,313 +467,241 @@ document
     );
   });
 
-// ── CARD 3D TILT
-(function() {
-  var cards =
-    document.querySelectorAll(
-      '.card-elite'
-    );
+// ─────────────────────────────────────────────────────────────
+// CARD 3D TILT
+// ─────────────────────────────────────────────────────────────
+(function () {
+  document
+    .querySelectorAll('.card-elite')
+    .forEach(function (card) {
+      card.addEventListener(
+        'mousemove',
+        function (event) {
+          var rectangle =
+            card.getBoundingClientRect();
 
-  cards.forEach(function(card) {
-    card.addEventListener(
-      'mousemove',
-      function(event) {
-        var rectangle =
-          card.getBoundingClientRect();
+          var centerX =
+            rectangle.left +
+            rectangle.width / 2;
 
-        var centerX =
-          rectangle.left +
-          rectangle.width / 2;
+          var centerY =
+            rectangle.top +
+            rectangle.height / 2;
 
-        var centerY =
-          rectangle.top +
-          rectangle.height / 2;
+          var distanceX =
+            (
+              event.clientX -
+              centerX
+            ) /
+            (
+              rectangle.width / 2
+            );
 
-        var distanceX =
-          (
-            event.clientX -
-            centerX
-          ) /
-          (
-            rectangle.width / 2
-          );
+          var distanceY =
+            (
+              event.clientY -
+              centerY
+            ) /
+            (
+              rectangle.height / 2
+            );
 
-        var distanceY =
-          (
-            event.clientY -
-            centerY
-          ) /
-          (
-            rectangle.height / 2
-          );
+          var rotateX =
+            distanceY * -4;
 
-        var rotateX =
-          distanceY * -4;
+          var rotateY =
+            distanceX * 5;
 
-        var rotateY =
-          distanceX * 5;
+          card.style.transform =
+            'translateY(-6px) ' +
+            'perspective(700px) ' +
+            'rotateX(' +
+            rotateX +
+            'deg) rotateY(' +
+            rotateY +
+            'deg)';
 
-        card.style.transform =
-          'translateY(-6px) ' +
-          'perspective(700px) ' +
-          'rotateX(' +
-          rotateX +
-          'deg) ' +
-          'rotateY(' +
-          rotateY +
-          'deg)';
-
-        card.style.boxShadow =
-          distanceX * 8 +
-          'px ' +
-          (
-            distanceY * 8 +
-            20
-          ) +
-          'px 48px rgba(1,4,11,0.65), ' +
-          '0 0 0 1px rgba(88,117,133,0.15)';
-      }
-    );
-
-    card.addEventListener(
-      'mouseleave',
-      function() {
-        card.style.transform = '';
-        card.style.boxShadow = '';
-      }
-    );
-  });
-})();
-
-// ══════════════════════════════════════════════════════════════
-// CARROSSEL DE TRANSFORMAÇÕES
-// Atual nítido + anterior e próximo com blur
-// ══════════════════════════════════════════════════════════════
-(function() {
-  var track =
-    document.getElementById(
-      'transfTrack'
-    );
-
-  var viewport =
-    document.getElementById(
-      'transfViewport'
-    );
-
-  var dotsWrapper =
-    document.getElementById(
-      'transfDots'
-    );
-
-  var previousButton =
-    document.getElementById(
-      'transfPrev'
-    );
-
-  var nextButton =
-    document.getElementById(
-      'transfNext'
-    );
-
-  if (
-    !track ||
-    !viewport ||
-    !dotsWrapper
-  ) {
-    return;
-  }
-
-  track
-    .querySelectorAll(
-      '[data-transf-clone="true"]'
-    )
-    .forEach(function(clone) {
-      clone.remove();
-    });
-
-  var originalCards =
-    Array.from(
-      track.querySelectorAll(
-        '.transf-card'
-      )
-    );
-
-  var total =
-    originalCards.length;
-
-  if (!total) return;
-
-  var allCards =
-    originalCards.slice();
-
-  var currentIndex = 0;
-  var isJumping = false;
-  var isAnimating = false;
-  var resizeFrame = 0;
-
-  if (total > 1) {
-    var firstClone =
-      originalCards[0]
-        .cloneNode(true);
-
-    var lastClone =
-      originalCards[
-        total - 1
-      ].cloneNode(true);
-
-    firstClone.dataset.transfClone =
-      'true';
-
-    lastClone.dataset.transfClone =
-      'true';
-
-    firstClone.setAttribute(
-      'aria-hidden',
-      'true'
-    );
-
-    lastClone.setAttribute(
-      'aria-hidden',
-      'true'
-    );
-
-    track.appendChild(firstClone);
-
-    track.insertBefore(
-      lastClone,
-      originalCards[0]
-    );
-
-    allCards =
-      Array.from(
-        track.querySelectorAll(
-          '.transf-card'
-        )
+          card.style.boxShadow =
+            distanceX * 8 +
+            'px ' +
+            (
+              distanceY * 8 +
+              20
+            ) +
+            'px 48px rgba(1,4,11,0.65), ' +
+            '0 0 0 1px rgba(88,117,133,0.15)';
+        }
       );
 
-    currentIndex = 1;
+      card.addEventListener(
+        'mouseleave',
+        function () {
+          card.style.transform = '';
+          card.style.boxShadow = '';
+        }
+      );
+    });
+})();
+
+// ═════════════════════════════════════════════════════════════
+// CARROSSEL DE TRANSFORMAÇÕES
+//
+// Estrutura visual:
+// [ anterior inteiro com blur ]
+// [ atual inteiro e nítido ]
+// [ próximo inteiro com blur ]
+//
+// A animação ocorre somente pelas classes dos cards.
+// O track nunca recebe redução de opacity.
+// ═════════════════════════════════════════════════════════════
+(function () {
+  'use strict';
+
+  var track = null;
+  var viewport = null;
+  var dotsWrapper = null;
+  var previousButton = null;
+  var nextButton = null;
+
+  var cards = [];
+  var dots = [];
+
+  var total = 0;
+  var currentIndex = 0;
+
+  var isChanging = false;
+  var pendingTarget = null;
+  var pendingDirection = 0;
+  var changeTimer = null;
+
+  var pointerId = null;
+  var pointerStartX = 0;
+  var pointerLastX = 0;
+  var pointerDragging = false;
+
+  var SWIPE_THRESHOLD = 46;
+  var CHANGE_DURATION = 280;
+
+  var reducedMotion =
+    window.matchMedia &&
+    window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+  function normalizeIndex(index) {
+    if (!total) {
+      return 0;
+    }
+
+    return (
+      (
+        index % total
+      ) +
+      total
+    ) % total;
   }
 
-  viewport.setAttribute(
-    'tabindex',
-    '0'
-  );
-
-  viewport.setAttribute(
-    'role',
-    'region'
-  );
-
-  viewport.setAttribute(
-    'aria-label',
-    'Carrossel de transformações corporais'
-  );
-
-  dotsWrapper.innerHTML = '';
-
-  var dots =
-    originalCards.map(
-      function(card, index) {
-        var dot =
-          document.createElement(
-            'button'
-          );
-
-        dot.type = 'button';
-
-        dot.className =
-          'transf-dot' +
-          (
-            index === 0
-              ? ' active'
-              : ''
-          );
-
-        dot.setAttribute(
-          'aria-label',
-          'Ir para transformação ' +
-          (
-            index + 1
-          )
-        );
-
-        dot.setAttribute(
-          'aria-current',
-          index === 0
-            ? 'true'
-            : 'false'
-        );
-
-        dot.addEventListener(
-          'click',
-          function() {
-            goTo(
-              total > 1
-                ? index + 1
-                : index,
-              true
-            );
-          }
-        );
-
-        dotsWrapper.appendChild(dot);
-
-        return dot;
-      }
+  function getPreviousIndex() {
+    return normalizeIndex(
+      currentIndex - 1
     );
+  }
 
-  function getRealIndex() {
+  function getNextIndex() {
+    return normalizeIndex(
+      currentIndex + 1
+    );
+  }
+
+  function getDirectionTo(targetIndex) {
     if (total <= 1) {
       return 0;
     }
 
-    var index =
-      currentIndex - 1;
+    var target =
+      normalizeIndex(
+        targetIndex
+      );
 
-    if (index < 0) {
-      index = total - 1;
-    }
+    var forwardDistance =
+      normalizeIndex(
+        target - currentIndex
+      );
 
-    if (index >= total) {
-      index = 0;
-    }
+    var backwardDistance =
+      normalizeIndex(
+        currentIndex - target
+      );
 
-    return index;
+    return forwardDistance <=
+      backwardDistance
+        ? 1
+        : -1;
   }
 
-  function getOffset(index) {
-    var card =
-      allCards[index];
+  /*
+   * Remove qualquer opacity, transform ou animação
+   * inline deixada por implementações anteriores.
+   */
+  function resetTrackVisualState() {
+    if (!track) return;
 
-    if (!card) return 0;
+    if (
+      typeof track.getAnimations ===
+      'function'
+    ) {
+      track
+        .getAnimations()
+        .forEach(function (animation) {
+          animation.cancel();
+        });
+    }
 
-    var cardLeft =
-      card.offsetLeft;
+    track.style.opacity = '1';
+    track.style.transform =
+      'translate3d(0, 0, 0)';
 
-    var cardWidth =
-      card.offsetWidth;
-
-    var viewportWidth =
-      viewport.clientWidth;
-
-    return Math.round(
-      cardLeft -
-      (
-        viewportWidth -
-        cardWidth
-      ) / 2
+    track.classList.remove(
+      'is-changing',
+      'is-moving-next',
+      'is-moving-prev'
     );
   }
 
-  function updateVisual() {
+  function updateDots() {
+    dots.forEach(
+      function (dot, index) {
+        var active =
+          index === currentIndex;
+
+        dot.classList.toggle(
+          'active',
+          active
+        );
+
+        dot.setAttribute(
+          'aria-current',
+          active
+            ? 'true'
+            : 'false'
+        );
+      }
+    );
+  }
+
+  function updateCards() {
+    if (!cards.length) {
+      return;
+    }
+
     var previousIndex =
-      currentIndex - 1;
+      getPreviousIndex();
 
     var nextIndex =
-      currentIndex + 1;
+      getNextIndex();
 
-    allCards.forEach(
-      function(card, index) {
+    cards.forEach(
+      function (card, index) {
         var active =
           index === currentIndex;
 
@@ -834,25 +718,38 @@ document
           !previous &&
           !next;
 
-        card.classList.toggle(
+        card.classList.remove(
           'active',
-          active
-        );
-
-        card.classList.toggle(
+          'is-active',
           'is-prev',
-          previous
-        );
-
-        card.classList.toggle(
           'is-next',
-          next
+          'is-hidden'
         );
 
-        card.classList.toggle(
-          'is-hidden',
-          hidden
-        );
+        /*
+         * Cards necessários precisam ser exibidos
+         * antes da aplicação das classes.
+         */
+        card.hidden = hidden;
+
+        if (active) {
+          card.classList.add(
+            'active',
+            'is-active'
+          );
+        } else if (previous) {
+          card.classList.add(
+            'is-prev'
+          );
+        } else if (next) {
+          card.classList.add(
+            'is-next'
+          );
+        } else {
+          card.classList.add(
+            'is-hidden'
+          );
+        }
 
         card.setAttribute(
           'aria-hidden',
@@ -860,175 +757,223 @@ document
             ? 'false'
             : 'true'
         );
+
+        card.setAttribute(
+          'tabindex',
+          active
+            ? '0'
+            : '-1'
+        );
       }
     );
 
-    var realIndex =
-      getRealIndex();
+    updateDots();
 
-    dots.forEach(
-      function(dot, index) {
-        var active =
-          index === realIndex;
+    if (viewport) {
+      viewport.setAttribute(
+        'aria-label',
+        'Transformação ' +
+          (
+            currentIndex + 1
+          ) +
+          ' de ' +
+          total
+      );
+    }
 
-        dot.classList.toggle(
-          'active',
-          active
+    /*
+     * Proteção final:
+     * o pai nunca pode ficar transparente.
+     */
+    resetTrackVisualState();
+  }
+
+  function processPendingNavigation() {
+    if (pendingTarget === null) {
+      return;
+    }
+
+    var target =
+      pendingTarget;
+
+    var direction =
+      pendingDirection ||
+      getDirectionTo(target);
+
+    pendingTarget = null;
+    pendingDirection = 0;
+
+    goTo(
+      target,
+      direction
+    );
+  }
+
+  function finishChange() {
+    clearTimeout(changeTimer);
+
+    changeTimer = null;
+    isChanging = false;
+
+    resetTrackVisualState();
+    processPendingNavigation();
+  }
+
+  function applyChange(
+    targetIndex,
+    direction
+  ) {
+    currentIndex =
+      normalizeIndex(
+        targetIndex
+      );
+
+    resetTrackVisualState();
+
+    if (track) {
+      track.classList.add(
+        'is-changing'
+      );
+
+      track.classList.add(
+        direction > 0
+          ? 'is-moving-next'
+          : 'is-moving-prev'
+      );
+    }
+
+    /*
+     * A troca das classes dos cards gera o efeito
+     * de blur e nitidez pelo próprio CSS.
+     */
+    updateCards();
+
+    if (reducedMotion) {
+      finishChange();
+      return;
+    }
+
+    changeTimer =
+      setTimeout(
+        finishChange,
+        CHANGE_DURATION
+      );
+  }
+
+  function goTo(
+    targetIndex,
+    direction
+  ) {
+    if (total <= 1) {
+      return;
+    }
+
+    var target =
+      normalizeIndex(
+        targetIndex
+      );
+
+    var resolvedDirection =
+      direction ||
+      getDirectionTo(target);
+
+    if (
+      target === currentIndex &&
+      !isChanging
+    ) {
+      return;
+    }
+
+    /*
+     * Cliques rápidos não travam o carrossel.
+     * O último destino solicitado é executado
+     * depois da troca atual.
+     */
+    if (isChanging) {
+      pendingTarget = target;
+      pendingDirection =
+        resolvedDirection;
+
+      return;
+    }
+
+    isChanging = true;
+
+    applyChange(
+      target,
+      resolvedDirection
+    );
+  }
+
+  function slide(direction) {
+    if (total <= 1) {
+      return;
+    }
+
+    var normalizedDirection =
+      direction < 0
+        ? -1
+        : 1;
+
+    var baseIndex =
+      pendingTarget !== null
+        ? pendingTarget
+        : currentIndex;
+
+    goTo(
+      baseIndex +
+        normalizedDirection,
+      normalizedDirection
+    );
+  }
+
+  function buildDots() {
+    if (!dotsWrapper) return;
+
+    dotsWrapper.innerHTML = '';
+
+    dots = cards.map(
+      function (card, index) {
+        var dot =
+          document.createElement(
+            'button'
+          );
+
+        dot.type = 'button';
+        dot.className =
+          'transf-dot';
+
+        dot.setAttribute(
+          'aria-label',
+          'Ir para transformação ' +
+            (
+              index + 1
+            )
         );
 
         dot.setAttribute(
           'aria-current',
-          active
-            ? 'true'
-            : 'false'
-        );
-      }
-    );
-
-    if (previousButton) {
-      previousButton.disabled = false;
-    }
-
-    if (nextButton) {
-      nextButton.disabled = false;
-    }
-  }
-
-  function setPosition(
-    index,
-    animated
-  ) {
-    track.style.transition =
-      animated
-        ? 'transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)'
-        : 'none';
-
-    track.style.transform =
-      'translate3d(' +
-      -getOffset(index) +
-      'px, 0, 0)';
-  }
-
-  function goTo(
-    index,
-    animated
-  ) {
-    if (animated === undefined) {
-      animated = true;
-    }
-
-    if (total <= 1) {
-      currentIndex = 0;
-    } else {
-      currentIndex = index;
-    }
-
-    setPosition(
-      currentIndex,
-      animated
-    );
-
-    updateVisual();
-  }
-
-  function refreshPosition() {
-    cancelAnimationFrame(
-      resizeFrame
-    );
-
-    resizeFrame =
-      requestAnimationFrame(
-        function() {
-          goTo(
-            currentIndex,
-            false
-          );
-        }
-      );
-  }
-
-  track.addEventListener(
-    'transitionstart',
-    function(event) {
-      if (
-        event.target === track &&
-        event.propertyName ===
-          'transform'
-      ) {
-        isAnimating = true;
-      }
-    }
-  );
-
-  track.addEventListener(
-    'transitionend',
-    function(event) {
-      if (
-        event.target !== track ||
-        event.propertyName !==
-          'transform'
-      ) {
-        return;
-      }
-
-      isAnimating = false;
-
-      if (
-        total <= 1 ||
-        isJumping
-      ) {
-        return;
-      }
-
-      if (currentIndex === 0) {
-        isJumping = true;
-
-        goTo(
-          total,
-          false
+          'false'
         );
 
-        requestAnimationFrame(
-          function() {
-            requestAnimationFrame(
-              function() {
-                isJumping = false;
-              }
+        dot.addEventListener(
+          'click',
+          function () {
+            goTo(
+              index,
+              getDirectionTo(index)
             );
           }
         );
-      } else if (
-        currentIndex ===
-        allCards.length - 1
-      ) {
-        isJumping = true;
 
-        goTo(
-          1,
-          false
-        );
+        dotsWrapper.appendChild(dot);
 
-        requestAnimationFrame(
-          function() {
-            requestAnimationFrame(
-              function() {
-                isJumping = false;
-              }
-            );
-          }
-        );
+        return dot;
       }
-    }
-  );
+    );
+  }
 
-  // ── DRAG / SWIPE
-  var startX = 0;
-  var lastX = 0;
-  var startOffset = 0;
-  var dragging = false;
-  var pointerId = null;
-
-  function dragStart(event) {
+  function handlePointerDown(event) {
     if (
       total <= 1 ||
       event.button > 0
@@ -1036,29 +981,32 @@ document
       return;
     }
 
+    if (
+      event.target.closest(
+        'button, a'
+      )
+    ) {
+      return;
+    }
+
     pointerId =
       event.pointerId;
 
-    startX =
+    pointerStartX =
       event.clientX;
 
-    lastX = startX;
+    pointerLastX =
+      pointerStartX;
 
-    startOffset =
-      getOffset(currentIndex);
+    pointerDragging = true;
 
-    dragging = true;
-
-    track.classList.add(
-      'dragging'
+    viewport.classList.add(
+      'is-dragging'
     );
-
-    track.style.transition =
-      'none';
 
     if (
       viewport.setPointerCapture &&
-      pointerId !== undefined
+      pointerId !== null
     ) {
       viewport.setPointerCapture(
         pointerId
@@ -1066,64 +1014,35 @@ document
     }
   }
 
-  function dragMove(event) {
+  function handlePointerMove(event) {
     if (
-      !dragging ||
+      !pointerDragging ||
       event.pointerId !== pointerId
     ) {
       return;
     }
 
-    lastX =
+    pointerLastX =
       event.clientX;
-
-    var delta =
-      lastX - startX;
-
-    track.style.transform =
-      'translate3d(' +
-      -(
-        startOffset -
-        delta
-      ) +
-      'px, 0, 0)';
   }
 
-  function dragEnd(event) {
+  function finishPointer(event) {
     if (
-      !dragging ||
+      !pointerDragging ||
       event.pointerId !== pointerId
     ) {
       return;
     }
 
-    dragging = false;
-
-    track.classList.remove(
-      'dragging'
-    );
-
     var delta =
-      lastX - startX;
+      pointerLastX -
+      pointerStartX;
 
-    if (
-      Math.abs(delta) >= 50
-    ) {
-      goTo(
-        currentIndex +
-        (
-          delta < 0
-            ? 1
-            : -1
-        ),
-        true
-      );
-    } else {
-      goTo(
-        currentIndex,
-        true
-      );
-    }
+    pointerDragging = false;
+
+    viewport.classList.remove(
+      'is-dragging'
+    );
 
     if (
       viewport.hasPointerCapture &&
@@ -1137,137 +1056,358 @@ document
     }
 
     pointerId = null;
-  }
 
-  viewport.addEventListener(
-    'pointerdown',
-    dragStart
-  );
-
-  viewport.addEventListener(
-    'pointermove',
-    dragMove
-  );
-
-  viewport.addEventListener(
-    'pointerup',
-    dragEnd
-  );
-
-  viewport.addEventListener(
-    'pointercancel',
-    dragEnd
-  );
-
-  viewport.addEventListener(
-    'keydown',
-    function(event) {
-      if (
-        event.key ===
-        'ArrowLeft'
-      ) {
-        event.preventDefault();
-
-        window.transfSlide(-1);
-      }
-
-      if (
-        event.key ===
-        'ArrowRight'
-      ) {
-        event.preventDefault();
-
-        window.transfSlide(1);
-      }
+    if (
+      Math.abs(delta) <
+      SWIPE_THRESHOLD
+    ) {
+      return;
     }
-  );
 
-  window.transfSlide =
-    function(direction) {
-      if (
-        total <= 1 ||
-        isAnimating ||
-        isJumping ||
-        dragging
-      ) {
-        return;
-      }
-
-      goTo(
-        currentIndex +
-        direction,
-        true
-      );
-    };
-
-  window.addEventListener(
-    'resize',
-    refreshPosition,
-    { passive: true }
-  );
-
-  window.addEventListener(
-    'orientationchange',
-    refreshPosition,
-    { passive: true }
-  );
-
-  if (
-    'ResizeObserver' in window
-  ) {
-    var resizeObserver =
-      new ResizeObserver(
-        refreshPosition
-      );
-
-    resizeObserver.observe(
-      viewport
+    slide(
+      delta < 0
+        ? 1
+        : -1
     );
   }
 
-  track
-    .querySelectorAll('img')
-    .forEach(function(image) {
-      image.setAttribute(
-        'draggable',
-        'false'
-      );
-
-      if (!image.complete) {
-        image.addEventListener(
-          'load',
-          refreshPosition,
-          { once: true }
-        );
-      }
-    });
-
-  requestAnimationFrame(
-    function() {
-      requestAnimationFrame(
-        function() {
-          goTo(
-            total > 1
-              ? 1
-              : 0,
-            false
-          );
+  function bindArrowEvents() {
+    /*
+     * O HTML atual já possui onclick.
+     * Só adiciona listener quando onclick não existir.
+     */
+    if (
+      previousButton &&
+      !previousButton.hasAttribute(
+        'onclick'
+      )
+    ) {
+      previousButton.addEventListener(
+        'click',
+        function () {
+          slide(-1);
         }
       );
     }
-  );
-})();
 
-// ── COUNTUP
-(function() {
-  var statisticElements =
+    if (
+      nextButton &&
+      !nextButton.hasAttribute(
+        'onclick'
+      )
+    ) {
+      nextButton.addEventListener(
+        'click',
+        function () {
+          slide(1);
+        }
+      );
+    }
+  }
+
+  function bindKeyboardEvents() {
+    viewport.addEventListener(
+      'keydown',
+      function (event) {
+        if (
+          event.key ===
+          'ArrowLeft'
+        ) {
+          event.preventDefault();
+          slide(-1);
+        }
+
+        if (
+          event.key ===
+          'ArrowRight'
+        ) {
+          event.preventDefault();
+          slide(1);
+        }
+
+        if (
+          event.key === 'Home'
+        ) {
+          event.preventDefault();
+
+          goTo(
+            0,
+            -1
+          );
+        }
+
+        if (
+          event.key === 'End'
+        ) {
+          event.preventDefault();
+
+          goTo(
+            total - 1,
+            1
+          );
+        }
+      }
+    );
+  }
+
+  function bindPointerEvents() {
+    viewport.addEventListener(
+      'pointerdown',
+      handlePointerDown
+    );
+
+    viewport.addEventListener(
+      'pointermove',
+      handlePointerMove
+    );
+
+    viewport.addEventListener(
+      'pointerup',
+      finishPointer
+    );
+
+    viewport.addEventListener(
+      'pointercancel',
+      finishPointer
+    );
+  }
+
+  function bindCardEvents() {
+    cards.forEach(
+      function (card) {
+        card.addEventListener(
+          'click',
+          function () {
+            if (
+              card.classList.contains(
+                'is-prev'
+              )
+            ) {
+              slide(-1);
+            } else if (
+              card.classList.contains(
+                'is-next'
+              )
+            ) {
+              slide(1);
+            }
+          }
+        );
+      }
+    );
+  }
+
+  function prepareImages() {
+    cards.forEach(
+      function (card) {
+        card
+          .querySelectorAll('img')
+          .forEach(
+            function (image) {
+              image.setAttribute(
+                'draggable',
+                'false'
+              );
+
+              image.addEventListener(
+                'dragstart',
+                function (event) {
+                  event.preventDefault();
+                }
+              );
+            }
+          );
+      }
+    );
+  }
+
+  function handleVisibilityChange() {
+    if (document.hidden) {
+      return;
+    }
+
+    clearTimeout(changeTimer);
+
+    changeTimer = null;
+    isChanging = false;
+
+    pendingTarget = null;
+    pendingDirection = 0;
+
+    resetTrackVisualState();
+    updateCards();
+  }
+
+  function initializeCarousel() {
+    track =
+      document.getElementById(
+        'transfTrack'
+      );
+
+    viewport =
+      document.getElementById(
+        'transfViewport'
+      );
+
+    dotsWrapper =
+      document.getElementById(
+        'transfDots'
+      );
+
+    previousButton =
+      document.getElementById(
+        'transfPrev'
+      );
+
+    nextButton =
+      document.getElementById(
+        'transfNext'
+      );
+
+    if (
+      !track ||
+      !viewport ||
+      !dotsWrapper
+    ) {
+      return;
+    }
+
+    /*
+     * Remove clones da implementação antiga.
+     */
+    track
+      .querySelectorAll(
+        '[data-transf-clone="true"]'
+      )
+      .forEach(
+        function (clone) {
+          clone.remove();
+        }
+      );
+
+    cards =
+      Array.from(
+        track.querySelectorAll(
+          ':scope > .transf-card'
+        )
+      );
+
+    total = cards.length;
+
+    if (!total) {
+      return;
+    }
+
+    currentIndex = 0;
+
+    resetTrackVisualState();
+
+    viewport.setAttribute(
+      'tabindex',
+      '0'
+    );
+
+    viewport.setAttribute(
+      'role',
+      'region'
+    );
+
+    viewport.setAttribute(
+      'aria-roledescription',
+      'carrossel'
+    );
+
+    track.setAttribute(
+      'role',
+      'group'
+    );
+
+    cards.forEach(
+      function (card, index) {
+        card.setAttribute(
+          'role',
+          'group'
+        );
+
+        card.setAttribute(
+          'aria-roledescription',
+          'slide'
+        );
+
+        card.setAttribute(
+          'aria-label',
+          (
+            index + 1
+          ) +
+            ' de ' +
+            total
+        );
+      }
+    );
+
+    prepareImages();
+    buildDots();
+
+    bindArrowEvents();
+    bindKeyboardEvents();
+    bindPointerEvents();
+    bindCardEvents();
+
+    document.addEventListener(
+      'visibilitychange',
+      handleVisibilityChange
+    );
+
+    updateCards();
+
+    window.transfSlide =
+      function (direction) {
+        slide(direction);
+      };
+
+    window.transfGoTo =
+      function (index) {
+        var target =
+          Number(index);
+
+        if (
+          Number.isNaN(target)
+        ) {
+          return;
+        }
+
+        goTo(
+          target,
+          getDirectionTo(target)
+        );
+      };
+  }
+
+  if (
+    document.readyState ===
+    'loading'
+  ) {
+    document.addEventListener(
+      'DOMContentLoaded',
+      initializeCarousel,
+      {
+        once: true
+      }
+    );
+  } else {
+    initializeCarousel();
+  }
+})();
+// ─────────────────────────────────────────────────────────────
+// COUNTUP
+// ─────────────────────────────────────────────────────────────
+(function () {
+  var statistics =
     document.querySelectorAll(
       '.hero-stat-num[data-target]'
     );
 
-  if (!statisticElements.length) {
-    return;
-  }
+  if (!statistics.length) return;
 
   var fired = false;
 
@@ -1308,7 +1448,7 @@ document
     var start = null;
 
     setTimeout(
-      function() {
+      function () {
         function step(timestamp) {
           if (!start) {
             start = timestamp;
@@ -1320,18 +1460,16 @@ document
                 timestamp -
                 start
               ) /
-              duration,
+                duration,
               1
-            );
-
-          var eased =
-            easeOutExpo(
-              progress
             );
 
           var current =
             Math.round(
-              eased * target
+              easeOutExpo(
+                progress
+              ) *
+                target
             );
 
           element.textContent =
@@ -1347,9 +1485,7 @@ document
           }
         }
 
-        requestAnimationFrame(
-          step
-        );
+        requestAnimationFrame(step);
       },
       delay
     );
@@ -1360,8 +1496,8 @@ document
 
     fired = true;
 
-    statisticElements.forEach(
-      function(element, index) {
+    statistics.forEach(
+      function (element, index) {
         animateCount(
           element,
           index * 280
@@ -1376,23 +1512,21 @@ document
     );
 
   if (heroContent) {
-    var mutationObserver =
+    var observer =
       new MutationObserver(
-        function(mutations) {
+        function (mutations) {
           mutations.forEach(
-            function(mutation) {
+            function (mutation) {
               if (
                 mutation.type ===
                   'attributes' &&
                 mutation.attributeName ===
                   'class' &&
-                heroContent.classList
-                  .contains(
-                    'hero-animated'
-                  )
+                heroContent.classList.contains(
+                  'hero-animated'
+                )
               ) {
-                mutationObserver
-                  .disconnect();
+                observer.disconnect();
 
                 setTimeout(
                   fireCounters,
@@ -1404,7 +1538,7 @@ document
         }
       );
 
-    mutationObserver.observe(
+    observer.observe(
       heroContent,
       {
         attributes: true
@@ -1414,10 +1548,9 @@ document
 
   if (
     heroContent &&
-    heroContent.classList
-      .contains(
-        'hero-animated'
-      )
+    heroContent.classList.contains(
+      'hero-animated'
+    )
   ) {
     setTimeout(
       fireCounters,
@@ -1426,7 +1559,7 @@ document
   }
 
   setTimeout(
-    function() {
+    function () {
       if (!fired) {
         fireCounters();
       }
@@ -1435,14 +1568,16 @@ document
   );
 })();
 
-// ══════════════════════════════════════════════════════════════
+// ═════════════════════════════════════════════════════════════
 // SIMULADOR INFINITEPAY
+//
 // Fonte de verdade: tabelas-infinitepay-elias.js
-// Consulta possui apenas:
+//
+// Consulta:
 // 0 = Consulta
 // 1 = Presencial
-// ══════════════════════════════════════════════════════════════
-(function() {
+// ═════════════════════════════════════════════════════════════
+(function () {
   'use strict';
 
   if (
@@ -1452,7 +1587,7 @@ document
   ) {
     console.error(
       'Dados comerciais da InfinitePay não foram carregados. ' +
-      'Carregue tabelas-infinitepay-elias.js antes de scripts.js.'
+        'Carregue tabelas-infinitepay-elias.js antes de scripts.js.'
     );
 
     return;
@@ -1539,15 +1674,11 @@ document
   }
 
   function getPlan(id) {
-    return (
-      DATA.plans[id] ||
-      null
-    );
+    return DATA.plans[id] || null;
   }
 
   function getOptionKeys(id) {
-    var plan =
-      getPlan(id);
+    var plan = getPlan(id);
 
     if (
       plan &&
@@ -1592,11 +1723,8 @@ document
   }
 
   function getOption(id) {
-    var plan =
-      getPlan(id);
-
-    var state =
-      SIM[id];
+    var plan = getPlan(id);
+    var state = SIM[id];
 
     if (
       !plan ||
@@ -1614,10 +1742,7 @@ document
     );
   }
 
-  function getCard(
-    id,
-    source
-  ) {
+  function getCard(id, source) {
     if (
       source &&
       source.closest
@@ -1655,7 +1780,7 @@ document
 
     if (!option) return;
 
-    var priceElement =
+    var amountElement =
       card.querySelector(
         '.pac-amount'
       );
@@ -1675,8 +1800,18 @@ document
         .toFixed(2)
         .split('.');
 
-    if (priceElement) {
-      priceElement.textContent =
+    var suffix =
+      PERIOD_SUFFIX[id] &&
+      PERIOD_SUFFIX[id][
+        SIM[id].option
+      ]
+        ? PERIOD_SUFFIX[id][
+            SIM[id].option
+          ]
+        : '';
+
+    if (amountElement) {
+      amountElement.textContent =
         Number(parts[0])
           .toLocaleString(
             'pt-BR'
@@ -1684,16 +1819,6 @@ document
     }
 
     if (periodElement) {
-      var suffix =
-        PERIOD_SUFFIX[id] &&
-        PERIOD_SUFFIX[id][
-          SIM[id].option
-        ]
-          ? PERIOD_SUFFIX[id][
-              SIM[id].option
-            ]
-          : '';
-
       periodElement.textContent =
         ',' +
         parts[1] +
@@ -1726,7 +1851,7 @@ document
         '.pac-period-row'
       )
       .forEach(
-        function(row, index) {
+        function (row, index) {
           var active =
             index ===
             selectedIndex;
@@ -1765,7 +1890,7 @@ document
         '.pac-sim-mod-btn'
       )
       .forEach(
-        function(button, index) {
+        function (button, index) {
           var active =
             index ===
             selectedIndex;
@@ -1793,11 +1918,11 @@ document
     document
       .querySelectorAll(
         '#pac-parc-' +
-        id +
-        ' .pac-parc-btn'
+          id +
+          ' .pac-parc-btn'
       )
       .forEach(
-        function(button, index) {
+        function (button, index) {
           var active =
             index === 0;
 
@@ -1818,7 +1943,9 @@ document
 
   function updateConsultaCTA() {
     var option =
-      getOption('consulta');
+      getOption(
+        'consulta'
+      );
 
     var cta =
       document.getElementById(
@@ -1836,25 +1963,19 @@ document
       option.ctaLabel ||
       'AGENDAR CONSULTA →';
 
-    var message =
-      option.whatsappText ||
-      'Olá Elias! Tenho interesse na consulta.';
-
     cta.href =
       'https://wa.me/5585996639595?text=' +
       encodeURIComponent(
-        message
+        option.whatsappText ||
+          'Olá Elias! Tenho interesse na consulta.'
       );
   }
 
   function render(id) {
-    var state =
-      SIM[id];
+    var state = SIM[id];
+    var option = getOption(id);
 
-    var option =
-      getOption(id);
-
-    var resultElement =
+    var result =
       document.getElementById(
         'pac-result-' + id
       );
@@ -1862,7 +1983,7 @@ document
     if (
       !state ||
       !option ||
-      !resultElement
+      !result
     ) {
       return;
     }
@@ -1870,7 +1991,7 @@ document
     if (
       state.mode === 'pix'
     ) {
-      resultElement.innerHTML =
+      result.innerHTML =
         '<div class="pac-result-tag">' +
           'PIX · TAXA 0% · ' +
           option.label +
@@ -1896,7 +2017,7 @@ document
       ];
 
     if (!credit) {
-      resultElement.innerHTML =
+      result.innerHTML =
         '<div class="pac-result-tag">' +
           'CRÉDITO · ' +
           option.label +
@@ -1913,7 +2034,7 @@ document
       return;
     }
 
-    resultElement.innerHTML =
+    result.innerHTML =
       '<div class="pac-result-tag">' +
         'CRÉDITO EM ' +
         state.parc +
@@ -1929,13 +2050,7 @@ document
         ) +
       '</div>' +
 
-      '<div class="pac-result-sub" ' +
-        'style="' +
-          'display:flex;' +
-          'flex-direction:column;' +
-          'gap:2px;' +
-          'margin-top:6px' +
-        '">' +
+      '<div class="pac-result-sub">' +
 
         '<span>' +
           'Total no cartão: ' +
@@ -1954,10 +2069,7 @@ document
       '</div>';
   }
 
-  function refresh(
-    id,
-    source
-  ) {
+  function refresh(id, source) {
     var card =
       getCard(
         id,
@@ -1984,7 +2096,7 @@ document
   }
 
   window.pacSetMod =
-    function(
+    function (
       id,
       selection,
       button
@@ -2027,7 +2139,7 @@ document
     };
 
   window.simSetMod =
-    function(
+    function (
       id,
       selection,
       button
@@ -2070,7 +2182,7 @@ document
     };
 
   window.pacSetMode =
-    function(
+    function (
       id,
       mode,
       button
@@ -2093,7 +2205,7 @@ document
             '.pac-mode-btn'
           )
           .forEach(
-            function(modeButton) {
+            function (modeButton) {
               modeButton
                 .classList.remove(
                   'active'
@@ -2141,7 +2253,7 @@ document
     };
 
   window.pacSetParc =
-    function(
+    function (
       id,
       installmentNumber,
       button
@@ -2164,7 +2276,7 @@ document
             '.pac-parc-btn'
           )
           .forEach(
-            function(item) {
+            function (item) {
               item.classList.remove(
                 'active'
               );
@@ -2194,7 +2306,7 @@ document
       'lite',
       'vip',
       'consulta'
-    ].forEach(function(id) {
+    ].forEach(function (id) {
       var plan =
         getPlan(id);
 
@@ -2232,7 +2344,8 @@ document
   ) {
     document.addEventListener(
       'DOMContentLoaded',
-      initialize
+      initialize,
+      { once: true }
     );
   } else {
     initialize();
