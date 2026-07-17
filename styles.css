@@ -141,14 +141,33 @@ select:focus-visible {
   display: flex; align-items: center; justify-content: space-between;
   height: 68px;
 }
-.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.nav-logo svg { width: 36px; height: auto; flex-shrink: 0; }
-.nav-logo-text {
-  font-weight: 900;
-  font-size: 1rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--snow);
+.nav-logo {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  text-decoration: none;
+}
+
+/* Marca oficial "ELIAS" usada na navbar e no rodapé */
+.brand-logo {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  flex: 0 0 auto;
+  object-fit: contain;
+
+  /*
+    O SVG oficial possui fundo preto.
+    O modo screen integra o preto ao fundo da página e preserva
+    o lettering branco, inclusive quando a navbar está transparente.
+  */
+  mix-blend-mode: screen;
+}
+
+.brand-logo--nav {
+  width: 165px;
+  height: auto;
 }
 .nav-links {
   display: flex; align-items: center; gap: 32px;
@@ -178,6 +197,27 @@ select:focus-visible {
 }
 .mobile-menu.open { display: flex; }
 .mobile-menu a { color: var(--snow); text-decoration: none; font-weight: 500; font-size: 1rem; letter-spacing: 0.04em; text-transform: uppercase; padding: 12px 0; border-bottom: 1px solid rgba(88,117,133,0.1); }
+
+
+@media (max-width: 768px) {
+  .brand-logo--nav {
+    width: 150px;
+  }
+
+  .brand-logo--footer {
+    width: 185px;
+  }
+}
+
+@media (max-width: 360px) {
+  .brand-logo--nav {
+    width: 138px;
+  }
+
+  .brand-logo--footer {
+    width: 170px;
+  }
+}
 
 @media (max-width: 1024px) {
   .nav-links,
@@ -2531,17 +2571,14 @@ footer {
   position: relative; z-index: 1;
 }
 .footer-logo {
-  display: flex; align-items: center; gap: 10px;
+  display: flex;
+  align-items: center;
   margin-bottom: 14px;
 }
-.footer-logo svg {
-  width: 34px;
+
+.brand-logo--footer {
+  width: 200px;
   height: auto;
-  flex-shrink: 0;
-}
-.footer-logo-text {
-  font-weight: 900; font-size: 0.9rem;
-  letter-spacing: 0.08em; text-transform: uppercase; color: var(--snow);
 }
 .footer-tagline {
   font-size: 0.82rem; color: var(--mist);
@@ -2627,4 +2664,3 @@ footer {
   gap: 10px;
   margin-top: 4px;
 }
-

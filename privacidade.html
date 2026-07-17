@@ -2,16 +2,1043 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Política de Privacidade — Carlos Elias</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Política de Privacidade — Elias</title>
+  <meta
+    name="description"
+    content="Saiba como os dados pessoais são coletados, utilizados, armazenados e protegidos nos canais digitais de Elias."
+  >
   <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#01040B">
+
   <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* ==========================================================
+       PÁGINA DE PRIVACIDADE
+       Estilos isolados para não alterar o restante do site
+    ========================================================== */
+
+    body.privacy-page {
+      min-height: 100vh;
+      overflow-x: clip;
+      background:
+        radial-gradient(circle at 85% 8%, rgba(88, 117, 133, 0.16), transparent 34rem),
+        radial-gradient(circle at 8% 44%, rgba(40, 59, 74, 0.16), transparent 30rem),
+        var(--black);
+    }
+
+    .privacy-page a {
+      color: inherit;
+    }
+
+    .privacy-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid rgba(88, 117, 133, 0.14);
+      background: rgba(1, 4, 11, 0.84);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .privacy-nav-inner {
+      width: min(1180px, calc(100% - 40px));
+      min-height: 68px;
+      margin: 0 auto;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .privacy-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+
+      text-decoration: none;
+    }
+
+    .privacy-brand img {
+      display: block;
+      width: 50px;
+      height: auto;
+      flex: 0 0 auto;
+    }
+
+    .privacy-brand-name {
+      color: var(--snow);
+      font-size: 0.92rem;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .privacy-back {
+      min-height: 42px;
+      padding: 10px 15px;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+
+      border: 1px solid rgba(88, 117, 133, 0.28);
+      border-radius: 8px;
+
+      color: var(--silver);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      text-transform: uppercase;
+
+      transition:
+        color 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .privacy-back:hover {
+      color: var(--white);
+      border-color: rgba(182, 193, 199, 0.5);
+      background: rgba(255, 255, 255, 0.04);
+      transform: translateY(-1px);
+    }
+
+    .privacy-hero {
+      padding: clamp(72px, 10vw, 118px) 0 54px;
+    }
+
+    .privacy-container {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .privacy-kicker {
+      margin-bottom: 15px;
+
+      color: var(--mist);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .privacy-title {
+      max-width: 820px;
+      margin: 0;
+
+      color: var(--white);
+      font-size: clamp(2.45rem, 7vw, 5.6rem);
+      font-weight: 900;
+      line-height: 0.92;
+      letter-spacing: -0.055em;
+      text-transform: uppercase;
+    }
+
+    .privacy-intro {
+      max-width: 740px;
+      margin-top: 28px;
+
+      color: var(--silver);
+      font-size: clamp(1rem, 1.7vw, 1.14rem);
+      line-height: 1.8;
+    }
+
+    .privacy-meta {
+      margin-top: 30px;
+
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .privacy-meta-item {
+      min-height: 38px;
+      padding: 9px 12px;
+
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+
+      border: 1px solid rgba(88, 117, 133, 0.18);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.025);
+
+      color: var(--mist);
+      font-size: 0.76rem;
+    }
+
+    .privacy-meta-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--steel);
+      flex: 0 0 auto;
+    }
+
+    .privacy-summary {
+      margin-top: 44px;
+
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .privacy-summary-card {
+      min-width: 0;
+      padding: 22px;
+
+      border: 1px solid rgba(88, 117, 133, 0.17);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .privacy-summary-number {
+      margin-bottom: 12px;
+
+      color: var(--steel);
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .privacy-summary-title {
+      margin-bottom: 7px;
+
+      color: var(--snow);
+      font-size: 1rem;
+      font-weight: 750;
+    }
+
+    .privacy-summary-text {
+      color: var(--mist);
+      font-size: 0.84rem;
+      line-height: 1.65;
+    }
+
+    .privacy-layout {
+      padding: 36px 0 100px;
+
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: clamp(36px, 6vw, 82px);
+      align-items: start;
+    }
+
+    .privacy-toc {
+      position: sticky;
+      top: 96px;
+      padding: 18px;
+
+      border: 1px solid rgba(88, 117, 133, 0.15);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.022);
+    }
+
+    .privacy-toc-title {
+      margin-bottom: 12px;
+
+      color: var(--snow);
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .privacy-toc-list {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+
+      list-style: none;
+    }
+
+    .privacy-toc-list a {
+      display: block;
+      padding: 8px 9px;
+
+      border-radius: 7px;
+
+      color: var(--mist);
+      font-size: 0.76rem;
+      line-height: 1.35;
+      text-decoration: none;
+
+      transition:
+        color 0.2s ease,
+        background 0.2s ease;
+    }
+
+    .privacy-toc-list a:hover {
+      color: var(--snow);
+      background: rgba(88, 117, 133, 0.09);
+    }
+
+    .privacy-content {
+      min-width: 0;
+    }
+
+    .privacy-section {
+      scroll-margin-top: 100px;
+      padding: 0 0 38px;
+      margin-bottom: 38px;
+
+      border-bottom: 1px solid rgba(88, 117, 133, 0.12);
+    }
+
+    .privacy-section:last-of-type {
+      border-bottom: 0;
+      margin-bottom: 0;
+    }
+
+    .privacy-section-number {
+      display: block;
+      margin-bottom: 10px;
+
+      color: var(--steel);
+      font-size: 0.66rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .privacy-section h2 {
+      margin: 0 0 18px;
+
+      color: var(--white);
+      font-size: clamp(1.45rem, 3vw, 2.15rem);
+      font-weight: 850;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+
+    .privacy-section h3 {
+      margin: 24px 0 9px;
+
+      color: var(--snow);
+      font-size: 1rem;
+      font-weight: 750;
+    }
+
+    .privacy-section p,
+    .privacy-section li {
+      color: var(--silver);
+      font-size: 0.94rem;
+      line-height: 1.82;
+    }
+
+    .privacy-section p + p {
+      margin-top: 13px;
+    }
+
+    .privacy-list {
+      margin: 14px 0 0;
+      padding-left: 21px;
+    }
+
+    .privacy-list li + li {
+      margin-top: 8px;
+    }
+
+    .privacy-list li::marker {
+      color: var(--steel);
+    }
+
+    .privacy-note {
+      margin-top: 20px;
+      padding: 17px 18px;
+
+      border-left: 2px solid var(--steel);
+      border-radius: 0 10px 10px 0;
+      background: rgba(88, 117, 133, 0.075);
+    }
+
+    .privacy-note strong {
+      color: var(--snow);
+    }
+
+    .privacy-table-wrap {
+      width: 100%;
+      margin-top: 18px;
+
+      overflow-x: auto;
+
+      border: 1px solid rgba(88, 117, 133, 0.15);
+      border-radius: 12px;
+    }
+
+    .privacy-table {
+      width: 100%;
+      min-width: 660px;
+
+      border-collapse: collapse;
+      background: rgba(255, 255, 255, 0.018);
+    }
+
+    .privacy-table th,
+    .privacy-table td {
+      padding: 14px 16px;
+
+      border-bottom: 1px solid rgba(88, 117, 133, 0.11);
+
+      font-size: 0.8rem;
+      line-height: 1.55;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .privacy-table th {
+      color: var(--snow);
+      font-weight: 750;
+      background: rgba(88, 117, 133, 0.075);
+    }
+
+    .privacy-table td {
+      color: var(--silver);
+    }
+
+    .privacy-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .privacy-contact-card {
+      padding: clamp(24px, 5vw, 38px);
+
+      border: 1px solid rgba(88, 117, 133, 0.24);
+      border-radius: 18px;
+      background:
+        linear-gradient(135deg, rgba(40, 59, 74, 0.34), rgba(255, 255, 255, 0.025));
+    }
+
+    .privacy-contact-card h2 {
+      max-width: 600px;
+      margin: 0;
+
+      color: var(--white);
+      font-size: clamp(1.7rem, 4vw, 2.8rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+    }
+
+    .privacy-contact-card p {
+      max-width: 660px;
+      margin-top: 14px;
+
+      color: var(--silver);
+      font-size: 0.94rem;
+      line-height: 1.75;
+    }
+
+    .privacy-contact-actions {
+      margin-top: 22px;
+
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .privacy-contact-button {
+      min-height: 46px;
+      padding: 12px 18px;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 9px;
+      background: var(--snow);
+
+      color: var(--black) !important;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.07em;
+      text-decoration: none;
+      text-transform: uppercase;
+
+      transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+    }
+
+    .privacy-contact-button:hover {
+      background: var(--white);
+      transform: translateY(-1px);
+    }
+
+    .privacy-footer {
+      padding: 28px 0 34px;
+
+      border-top: 1px solid rgba(88, 117, 133, 0.1);
+    }
+
+    .privacy-footer-inner {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .privacy-footer-copy,
+    .privacy-footer-link {
+      color: rgba(123, 147, 159, 0.66);
+      font-size: 0.72rem;
+    }
+
+    .privacy-footer-link {
+      text-decoration: none;
+    }
+
+    .privacy-footer-link:hover {
+      color: var(--snow);
+    }
+
+    @media (max-width: 900px) {
+      .privacy-summary {
+        grid-template-columns: 1fr;
+      }
+
+      .privacy-layout {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .privacy-toc {
+        position: static;
+      }
+
+      .privacy-toc-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .privacy-nav-inner,
+      .privacy-container,
+      .privacy-footer-inner {
+        width: min(100% - 28px, 1180px);
+      }
+
+      .privacy-nav-inner {
+        min-height: 64px;
+      }
+
+      .privacy-brand img {
+        width: 44px;
+      }
+
+      .privacy-brand-name {
+        font-size: 0.84rem;
+      }
+
+      .privacy-back {
+        width: 44px;
+        padding: 10px;
+      }
+
+      .privacy-back-text {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+      }
+
+      .privacy-hero {
+        padding-top: 58px;
+      }
+
+      .privacy-title {
+        font-size: clamp(2.35rem, 15vw, 4rem);
+      }
+
+      .privacy-summary-card {
+        padding: 19px;
+      }
+
+      .privacy-layout {
+        padding-bottom: 72px;
+      }
+
+      .privacy-toc-list {
+        grid-template-columns: 1fr;
+      }
+
+      .privacy-section {
+        padding-bottom: 30px;
+        margin-bottom: 30px;
+      }
+
+      .privacy-section p,
+      .privacy-section li {
+        font-size: 0.9rem;
+      }
+
+      .privacy-contact-actions,
+      .privacy-contact-button {
+        width: 100%;
+      }
+
+      .privacy-footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .privacy-back,
+      .privacy-contact-button {
+        transition: none;
+      }
+    }
+  </style>
 </head>
-<body>
-  <main style="max-width:900px;margin:60px auto;padding:24px">
-    <h1>Política de Privacidade</h1>
-    <p>Esta página é um espaço reservado localmente. Substitua por conteúdo oficial antes do deploy.</p>
-    <p>Contato: <a href="https://wa.me/5585996639595">WhatsApp</a></p>
+
+<body class="privacy-page">
+  <header class="privacy-nav">
+    <div class="privacy-nav-inner">
+      <a href="index.html" class="privacy-brand" aria-label="Voltar para a página inicial">
+        <img
+          src="assets/images/SIMBOLO-TRANSPARENTE.svg"
+          alt=""
+          width="50"
+          height="24"
+          aria-hidden="true"
+        >
+        <span class="privacy-brand-name">Elias</span>
+      </a>
+
+      <a href="index.html" class="privacy-back">
+        <svg
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M19 12H5"></path>
+          <path d="M12 19l-7-7 7-7"></path>
+        </svg>
+        <span class="privacy-back-text">Voltar ao site</span>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="privacy-hero" aria-labelledby="privacy-title">
+      <div class="privacy-container">
+        <p class="privacy-kicker">Privacidade e proteção de dados</p>
+
+        <h1 id="privacy-title" class="privacy-title">
+          Política de<br>Privacidade.
+        </h1>
+
+        <p class="privacy-intro">
+          Esta política explica, de forma clara, como os dados pessoais são
+          coletados, utilizados, armazenados, compartilhados e protegidos nos
+          canais digitais e no atendimento de Elias.
+        </p>
+
+        <div class="privacy-meta" aria-label="Informações da política">
+          <span class="privacy-meta-item">
+            <span class="privacy-meta-dot" aria-hidden="true"></span>
+            Vigência: 16 de julho de 2026
+          </span>
+
+          <span class="privacy-meta-item">
+            <span class="privacy-meta-dot" aria-hidden="true"></span>
+            Aplicável ao site e aos canais de contato
+          </span>
+        </div>
+
+        <div class="privacy-summary" aria-label="Resumo da política">
+          <article class="privacy-summary-card">
+            <div class="privacy-summary-number">01 · Coleta</div>
+            <h2 class="privacy-summary-title">Somente o necessário</h2>
+            <p class="privacy-summary-text">
+              São tratados os dados necessários para responder contatos,
+              organizar atendimentos e prestar os serviços solicitados.
+            </p>
+          </article>
+
+          <article class="privacy-summary-card">
+            <div class="privacy-summary-number">02 · Uso</div>
+            <h2 class="privacy-summary-title">Finalidades claras</h2>
+            <p class="privacy-summary-text">
+              Os dados não são utilizados para finalidades incompatíveis com
+              aquelas informadas nesta política.
+            </p>
+          </article>
+
+          <article class="privacy-summary-card">
+            <div class="privacy-summary-number">03 · Controle</div>
+            <h2 class="privacy-summary-title">Você possui direitos</h2>
+            <p class="privacy-summary-text">
+              É possível solicitar informações, correções, exclusão e outras
+              providências previstas na legislação aplicável.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <div class="privacy-container privacy-layout">
+      <aside class="privacy-toc" aria-label="Índice da política">
+        <p class="privacy-toc-title">Nesta página</p>
+
+        <ol class="privacy-toc-list">
+          <li><a href="#controlador">Quem trata os dados</a></li>
+          <li><a href="#dados">Dados coletados</a></li>
+          <li><a href="#coleta">Como ocorre a coleta</a></li>
+          <li><a href="#finalidades">Finalidades e bases legais</a></li>
+          <li><a href="#compartilhamento">Compartilhamento</a></li>
+          <li><a href="#cookies">Cookies e tecnologias</a></li>
+          <li><a href="#armazenamento">Armazenamento e retenção</a></li>
+          <li><a href="#seguranca">Segurança</a></li>
+          <li><a href="#direitos">Seus direitos</a></li>
+          <li><a href="#menores">Crianças e adolescentes</a></li>
+          <li><a href="#alteracoes">Alterações desta política</a></li>
+          <li><a href="#contato-privacidade">Contato</a></li>
+        </ol>
+      </aside>
+
+      <div class="privacy-content">
+        <section id="controlador" class="privacy-section">
+          <span class="privacy-section-number">01 · Controlador</span>
+          <h2>Quem é responsável pelo tratamento?</h2>
+
+          <p>
+            Para fins desta política, <strong>Carlos Elias</strong>, nutricionista
+            responsável pelo site e pelos serviços divulgados, atua como
+            controlador dos dados pessoais tratados diretamente em seus canais.
+          </p>
+
+          <p>
+            Dúvidas e solicitações relacionadas à privacidade podem ser encaminhadas
+            pelo WhatsApp informado ao final desta página.
+          </p>
+        </section>
+
+        <section id="dados" class="privacy-section">
+          <span class="privacy-section-number">02 · Dados tratados</span>
+          <h2>Quais dados podem ser coletados?</h2>
+
+          <p>
+            Dependendo da forma como você utiliza o site ou entra em contato,
+            poderão ser tratados:
+          </p>
+
+          <ul class="privacy-list">
+            <li>nome completo;</li>
+            <li>número de telefone e WhatsApp;</li>
+            <li>objetivo nutricional informado no formulário;</li>
+            <li>mensagens, dúvidas e informações fornecidas voluntariamente;</li>
+            <li>
+              informações relacionadas à rotina, treinos, alimentação, composição
+              corporal ou saúde, quando compartilhadas voluntariamente;
+            </li>
+            <li>
+              dados técnicos básicos, como endereço IP, navegador, dispositivo,
+              data e horário de acesso, quando registrados pela infraestrutura de
+              hospedagem ou por serviços necessários ao funcionamento do site.
+            </li>
+          </ul>
+
+          <div class="privacy-note">
+            <p>
+              <strong>Dados de saúde exigem atenção especial.</strong>
+              Evite enviar informações médicas excessivas pelo formulário geral.
+              Informações necessárias ao acompanhamento serão solicitadas nos
+              canais apropriados e apenas no contexto do serviço.
+            </p>
+          </div>
+        </section>
+
+        <section id="coleta" class="privacy-section">
+          <span class="privacy-section-number">03 · Origem</span>
+          <h2>Como os dados são coletados?</h2>
+
+          <ul class="privacy-list">
+            <li>quando você preenche e envia o formulário do site;</li>
+            <li>quando inicia uma conversa pelo WhatsApp;</li>
+            <li>quando solicita informações, agenda ou contrata um serviço;</li>
+            <li>durante o atendimento e acompanhamento nutricional;</li>
+            <li>
+              automaticamente, de forma limitada, por registros técnicos de
+              segurança e funcionamento da hospedagem.
+            </li>
+          </ul>
+        </section>
+
+        <section id="finalidades" class="privacy-section">
+          <span class="privacy-section-number">04 · Utilização</span>
+          <h2>Para que os dados são utilizados?</h2>
+
+          <div class="privacy-table-wrap">
+            <table class="privacy-table">
+              <thead>
+                <tr>
+                  <th>Finalidade</th>
+                  <th>Exemplos de dados</th>
+                  <th>Fundamento aplicável</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Responder solicitações e dúvidas</td>
+                  <td>Nome, telefone e mensagem</td>
+                  <td>Procedimentos preliminares e legítimo atendimento da solicitação</td>
+                </tr>
+                <tr>
+                  <td>Agendar consultas e organizar o atendimento</td>
+                  <td>Nome, contato e modalidade escolhida</td>
+                  <td>Execução de contrato ou procedimentos anteriores à contratação</td>
+                </tr>
+                <tr>
+                  <td>Prestar acompanhamento nutricional</td>
+                  <td>Informações profissionais, alimentares e de saúde pertinentes</td>
+                  <td>Execução do serviço, tutela da saúde e demais hipóteses aplicáveis</td>
+                </tr>
+                <tr>
+                  <td>Cumprir obrigações legais e profissionais</td>
+                  <td>Registros necessários ao atendimento</td>
+                  <td>Cumprimento de obrigação legal ou regulatória</td>
+                </tr>
+                <tr>
+                  <td>Proteger o site e prevenir abusos</td>
+                  <td>Registros técnicos e de acesso</td>
+                  <td>Legítimo interesse e proteção do ambiente digital</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            Quando o consentimento for necessário, ele será solicitado de forma
+            específica e poderá ser revogado nos termos da legislação aplicável.
+          </p>
+        </section>
+
+        <section id="compartilhamento" class="privacy-section">
+          <span class="privacy-section-number">05 · Terceiros</span>
+          <h2>Com quem os dados podem ser compartilhados?</h2>
+
+          <p>
+            Os dados não são comercializados. O compartilhamento poderá ocorrer,
+            de forma limitada, com fornecedores necessários ao funcionamento do
+            site, à comunicação e à prestação do serviço, tais como:
+          </p>
+
+          <ul class="privacy-list">
+            <li>provedor de hospedagem e infraestrutura técnica;</li>
+            <li>WhatsApp e Instagram, serviços pertencentes à Meta;</li>
+            <li>plataformas utilizadas no atendimento, como o Dietbox;</li>
+            <li>prestadores administrativos, contábeis ou tecnológicos necessários;</li>
+            <li>
+              autoridades públicas, conselhos profissionais ou órgãos competentes,
+              quando houver obrigação legal ou determinação válida.
+            </li>
+          </ul>
+
+          <p>
+            Ao acessar serviços externos por links, também poderão ser aplicadas as
+            políticas de privacidade próprias dessas plataformas.
+          </p>
+
+          <p>
+            Alguns fornecedores podem processar dados fora do Brasil. Quando isso
+            ocorrer, serão observadas as regras aplicáveis às transferências
+            internacionais de dados e as salvaguardas adotadas pelo respectivo
+            fornecedor.
+          </p>
+        </section>
+
+        <section id="cookies" class="privacy-section">
+          <span class="privacy-section-number">06 · Navegação</span>
+          <h2>Cookies e tecnologias semelhantes</h2>
+
+          <p>
+            O site pode utilizar recursos técnicos estritamente necessários ao seu
+            funcionamento, à segurança e à manutenção das preferências essenciais.
+            Serviços externos carregados ou acessados pelo usuário também podem
+            utilizar cookies ou registros próprios.
+          </p>
+
+          <p>
+            Caso sejam implementadas ferramentas de análise, publicidade ou
+            rastreamento não essencial, esta política e os mecanismos de escolha
+            serão atualizados antes de sua utilização, quando exigido.
+          </p>
+
+          <p>
+            Você pode gerenciar cookies diretamente nas configurações do navegador,
+            considerando que a desativação de recursos essenciais poderá afetar o
+            funcionamento de determinadas partes do site.
+          </p>
+        </section>
+
+        <section id="armazenamento" class="privacy-section">
+          <span class="privacy-section-number">07 · Retenção</span>
+          <h2>Por quanto tempo os dados são mantidos?</h2>
+
+          <p>
+            Os dados serão mantidos apenas pelo período necessário para cumprir as
+            finalidades informadas, prestar o serviço, resguardar direitos e atender
+            obrigações legais, regulatórias, profissionais ou contratuais.
+          </p>
+
+          <p>
+            Encerrada a finalidade e inexistindo obrigação de conservação, os dados
+            poderão ser excluídos, anonimizados ou mantidos de forma segura quando
+            houver fundamento legal para isso.
+          </p>
+        </section>
+
+        <section id="seguranca" class="privacy-section">
+          <span class="privacy-section-number">08 · Proteção</span>
+          <h2>Como os dados são protegidos?</h2>
+
+          <p>
+            São adotadas medidas técnicas e administrativas razoáveis para reduzir
+            riscos de acesso não autorizado, perda, alteração, divulgação ou uso
+            inadequado dos dados pessoais.
+          </p>
+
+          <p>
+            Nenhum sistema é totalmente imune a incidentes. Caso seja identificado
+            um evento relevante, serão adotadas as providências cabíveis, incluindo
+            comunicações exigidas pela legislação aplicável.
+          </p>
+        </section>
+
+        <section id="direitos" class="privacy-section">
+          <span class="privacy-section-number">09 · Titular</span>
+          <h2>Quais são os seus direitos?</h2>
+
+          <p>
+            Nos termos da legislação aplicável, você poderá solicitar, quando
+            cabível:
+          </p>
+
+          <ul class="privacy-list">
+            <li>confirmação da existência de tratamento;</li>
+            <li>acesso aos dados pessoais;</li>
+            <li>correção de dados incompletos, inexatos ou desatualizados;</li>
+            <li>
+              anonimização, bloqueio ou eliminação de dados desnecessários,
+              excessivos ou tratados em desconformidade;
+            </li>
+            <li>portabilidade, observadas as regras aplicáveis;</li>
+            <li>informações sobre compartilhamentos realizados;</li>
+            <li>eliminação de dados tratados com consentimento, quando cabível;</li>
+            <li>revogação do consentimento;</li>
+            <li>oposição a determinados tratamentos;</li>
+            <li>revisão de decisões tomadas unicamente de forma automatizada.</li>
+          </ul>
+
+          <p>
+            Para proteger o titular, poderá ser solicitada confirmação de identidade
+            antes do atendimento de determinados pedidos.
+          </p>
+        </section>
+
+        <section id="menores" class="privacy-section">
+          <span class="privacy-section-number">10 · Público menor de idade</span>
+          <h2>Crianças e adolescentes</h2>
+
+          <p>
+            O site não é direcionado à coleta autônoma de dados de crianças. Quando
+            o atendimento envolver menores de idade, o tratamento deverá observar
+            o melhor interesse do menor e, quando aplicável, a participação ou
+            autorização de responsável legal.
+          </p>
+        </section>
+
+        <section id="alteracoes" class="privacy-section">
+          <span class="privacy-section-number">11 · Atualizações</span>
+          <h2>Alterações nesta política</h2>
+
+          <p>
+            Esta política poderá ser atualizada para refletir mudanças no site, nos
+            serviços, nos fornecedores utilizados ou nas exigências legais.
+          </p>
+
+          <p>
+            A versão vigente será sempre a publicada nesta página, acompanhada da
+            respectiva data de atualização.
+          </p>
+        </section>
+
+        <section id="contato-privacidade" class="privacy-contact-card">
+          <p class="privacy-kicker">Privacidade e dados pessoais</p>
+
+          <h2>Precisa exercer um direito ou tirar uma dúvida?</h2>
+
+          <p>
+            Envie sua solicitação pelo canal abaixo, informando que o assunto está
+            relacionado à privacidade ou à proteção de dados pessoais.
+          </p>
+
+          <div class="privacy-contact-actions">
+            <a
+              class="privacy-contact-button"
+              href="https://wa.me/5585996639595?text=Ol%C3%A1%20Elias%2C%20gostaria%20de%20falar%20sobre%20privacidade%20e%20prote%C3%A7%C3%A3o%20de%20dados."
+              target="_blank"
+              rel="noopener"
+            >
+              Falar pelo WhatsApp
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14"></path>
+                <path d="M12 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </div>
+        </section>
+      </div>
+    </div>
   </main>
+
+  <footer class="privacy-footer">
+    <div class="privacy-footer-inner">
+      <p class="privacy-footer-copy">
+        © 2026 Elias Nutrição. Todos os direitos reservados.
+      </p>
+
+      <a href="index.html" class="privacy-footer-link">
+        Voltar para a página inicial
+      </a>
+    </div>
+  </footer>
 </body>
 </html>

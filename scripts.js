@@ -1,8 +1,13 @@
 ﻿// ── HERO PHOTO: injeção via JS — evita parse lento de base64 inline
 (function() {
-  var mob = window.innerWidth < 768 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  var mob =
+    window.innerWidth < 768 ||
+    /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
   var img = document.getElementById('heroImg');
+
   if (!img) return;
+
   img.src = mob
     ? 'assets/images/image_6_2520acbf46.jpg'
     : 'assets/images/image_7_d17f1147ea.jpg';
@@ -11,15 +16,28 @@
 /* ════════════════════════════════════════════════════════════ */
 
 // ── NAVBAR SCROLL
-window.addEventListener('scroll', () => {
-  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
-}, { passive: true });
+window.addEventListener(
+  'scroll',
+  function() {
+    var navbar = document.getElementById('navbar');
 
-// ── HERO: animação de entrada (direita → posição) após imagem carregar
+    if (!navbar) return;
+
+    navbar.classList.toggle(
+      'scrolled',
+      window.scrollY > 20
+    );
+  },
+  { passive: true }
+);
+
+// ── HERO: animação de entrada
 (function() {
   var content = document.getElementById('heroContent');
   var img = document.getElementById('heroImg');
+
   if (!content) return;
+
   function triggerHero() {
     requestAnimationFrame(function() {
       setTimeout(function() {
@@ -27,11 +45,11 @@ window.addEventListener('scroll', () => {
       }, 80);
     });
   }
+
   if (img && img.complete) {
     triggerHero();
   } else if (img) {
     img.addEventListener('load', triggerHero);
-    // Fallback: animar depois de 400ms mesmo sem imagem
     setTimeout(triggerHero, 400);
   } else {
     triggerHero();
@@ -40,629 +58,2183 @@ window.addEventListener('scroll', () => {
 
 // ── MOBILE MENU
 function toggleMenu() {
-  var mm = document.getElementById('mobileMenu');
-  if (!mm) return;
-  var open = mm.classList.toggle('open');
-  // Update accessibility attributes
-  mm.setAttribute('aria-hidden', (!open).toString());
-  var btn = document.querySelector('.hamburger');
-  if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  var mobileMenu =
+    document.getElementById('mobileMenu');
+
+  if (!mobileMenu) return;
+
+  var open =
+    mobileMenu.classList.toggle('open');
+
+  mobileMenu.setAttribute(
+    'aria-hidden',
+    (!open).toString()
+  );
+
+  var button =
+    document.querySelector('.hamburger');
+
+  if (button) {
+    button.setAttribute(
+      'aria-expanded',
+      open ? 'true' : 'false'
+    );
+  }
 }
+
 function closeMenu() {
-  var mm = document.getElementById('mobileMenu');
-  if (!mm) return;
-  mm.classList.remove('open');
-  mm.setAttribute('aria-hidden', 'true');
-  var btn = document.querySelector('.hamburger');
-  if (btn) btn.setAttribute('aria-expanded', 'false');
+  var mobileMenu =
+    document.getElementById('mobileMenu');
+
+  if (!mobileMenu) return;
+
+  mobileMenu.classList.remove('open');
+
+  mobileMenu.setAttribute(
+    'aria-hidden',
+    'true'
+  );
+
+  var button =
+    document.querySelector('.hamburger');
+
+  if (button) {
+    button.setAttribute(
+      'aria-expanded',
+      'false'
+    );
+  }
 }
 
 // ── REVEAL ON SCROLL
-const revealEls = document.querySelectorAll('.reveal');
-const revealObs = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }});
-}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-revealEls.forEach(el => revealObs.observe(el));
+var revealElements =
+  document.querySelectorAll('.reveal');
+
+if ('IntersectionObserver' in window) {
+  var revealObserver =
+    new IntersectionObserver(
+      function(entries) {
+        entries.forEach(function(entry) {
+          if (!entry.isIntersecting) return;
+
+          entry.target.classList.add('visible');
+
+          revealObserver.unobserve(
+            entry.target
+          );
+        });
+      },
+      {
+        threshold: 0.12,
+        rootMargin: '0px 0px -40px 0px'
+      }
+    );
+
+  revealElements.forEach(function(element) {
+    revealObserver.observe(element);
+  });
+} else {
+  revealElements.forEach(function(element) {
+    element.classList.add('visible');
+  });
+}
 
 // ── LOGO SOBRE: animação draw + fill + float
 (function() {
-  var logo     = document.getElementById('sobreLogo');
-  var tagline  = document.getElementById('sobreTagline');
-  var logoCol  = document.getElementById('sobreLogoCol');
+  var logo =
+    document.getElementById('sobreLogo');
+
+  var tagline =
+    document.getElementById('sobreTagline');
+
+  var logoColumn =
+    document.getElementById('sobreLogoCol');
+
   if (!logo) return;
 
-  // Sequência: lp1 → lp2 → lp3 → lp4 (delays em ms)
-  var parts   = ['lp1','lp2','lp3','lp4'];
-  var delays  = [0, 220, 380, 540];
+  var parts = [
+    'lp1',
+    'lp2',
+    'lp3',
+    'lp4'
+  ];
 
-  var logoObs = new IntersectionObserver(function(entries) {
-    if (!entries[0].isIntersecting) return;
-    logoObs.disconnect();
+  var delays = [
+    0,
+    220,
+    380,
+    540
+  ];
 
-    // 1. Animar polígonos com efeito draw
-    parts.forEach(function(id, i) {
-      var el = document.getElementById(id);
-      if (!el) return;
-      setTimeout(function() {
-        el.classList.add('drawn');
-      }, delays[i]);
+  if (!('IntersectionObserver' in window)) {
+    parts.forEach(function(id) {
+      var element =
+        document.getElementById(id);
+
+      if (element) {
+        element.classList.add('drawn');
+      }
     });
 
-    // 2. Float do logo inteiro
-    setTimeout(function() {
-      logo.classList.add('animated');
-    }, 1000);
+    logo.classList.add('animated');
 
-    // 4. Tagline com letter-spacing
-    if (tagline) setTimeout(function() {
+    if (tagline) {
       tagline.classList.add('animated');
-    }, 1100);
+    }
 
-    // 5. Tags de especialidade
-    var tags = document.getElementById('sobreTags');
-    if (tags) setTimeout(function() {
-      tags.classList.add('animated');
-    }, 1400);
+    if (logoColumn) {
+      logoColumn.classList.add('animated');
+    }
 
-    // 5. Linha decorativa cresce
-    if (logoCol) setTimeout(function() {
-      logoCol.classList.add('animated');
-    }, 400);
+    return;
+  }
 
-  }, { threshold: 0.25 });
+  var logoObserver =
+    new IntersectionObserver(
+      function(entries) {
+        if (!entries[0].isIntersecting) {
+          return;
+        }
 
-  logoObs.observe(logo);
+        logoObserver.disconnect();
+
+        parts.forEach(function(id, index) {
+          var element =
+            document.getElementById(id);
+
+          if (!element) return;
+
+          setTimeout(function() {
+            element.classList.add('drawn');
+          }, delays[index]);
+        });
+
+        setTimeout(function() {
+          logo.classList.add('animated');
+        }, 1000);
+
+        if (tagline) {
+          setTimeout(function() {
+            tagline.classList.add('animated');
+          }, 1100);
+        }
+
+        var tags =
+          document.getElementById('sobreTags');
+
+        if (tags) {
+          setTimeout(function() {
+            tags.classList.add('animated');
+          }, 1400);
+        }
+
+        if (logoColumn) {
+          setTimeout(function() {
+            logoColumn.classList.add(
+              'animated'
+            );
+          }, 400);
+        }
+      },
+      {
+        threshold: 0.25
+      }
+    );
+
+  logoObserver.observe(logo);
 })();
 
 // ── FAQ ACCORDION
-function toggleFaq(btn) {
-  const item = btn.parentElement;
-  const isOpen = item.classList.contains('open');
+function toggleFaq(button) {
+  var item = button.parentElement;
 
-  document.querySelectorAll('.faq-item.open').forEach(i => {
-    i.classList.remove('open');
-    const q = i.querySelector('.faq-q');
-    if (q) q.setAttribute('aria-expanded','false');
-  });
+  var isOpen =
+    item.classList.contains('open');
+
+  document
+    .querySelectorAll('.faq-item.open')
+    .forEach(function(openItem) {
+      openItem.classList.remove('open');
+
+      var question =
+        openItem.querySelector('.faq-q');
+
+      if (question) {
+        question.setAttribute(
+          'aria-expanded',
+          'false'
+        );
+      }
+    });
 
   if (!isOpen) {
     item.classList.add('open');
-    btn.setAttribute('aria-expanded','true');
+
+    button.setAttribute(
+      'aria-expanded',
+      'true'
+    );
   }
 }
 
-(function() {
-  function bindFocusableClickables(selector, callback) {
-    document.querySelectorAll(selector).forEach(function(el) {
-      el.setAttribute('tabindex', '0');
-      if (!el.hasAttribute('role')) el.setAttribute('role', 'button');
-      el.setAttribute('aria-pressed', el.classList.contains('active') ? 'true' : 'false');
-      el.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          callback.call(this, e);
-        }
-      });
-    });
-  }
+// ── PLAN SELECTOR LEGADO
+function selectPlan(
+  planId,
+  period,
+  amount,
+  equivalent,
+  element
+) {
+  var card =
+    element.closest('.plan-card');
 
-  function initFocusableClickables() {
-    // `.faq-q` and `.pac-period-row` are semantic <button> elements now; no extra key bindings required.
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initFocusableClickables);
-  } else {
-    initFocusableClickables();
-  }
-})();
-
-// ── PLAN SELECTOR
-function selectPlan(planId, period, amount, equiv, el) {
-  const card = el.closest('.plan-card');
   if (!card) return;
-  card.querySelectorAll('.plan-option').forEach(o => o.classList.remove('selected'));
-  el.classList.add('selected');
-  const amEl = document.getElementById(planId + '-amount');
-  const eqEl = document.getElementById(planId + '-equiv');
-  if (amEl) amEl.textContent = amount;
-  if (eqEl) eqEl.textContent = equiv;
-}
 
-// ── FORM SUBMIT → WHATSAPP + ADMIN
-document.getElementById('leadForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const nome = document.getElementById('nome').value.trim();
-  const whatsapp = document.getElementById('whatsapp').value.trim();
-  const objetivo = document.getElementById('objetivo').value;
-  const mensagem = document.getElementById('mensagem').value.trim();
+  card
+    .querySelectorAll('.plan-option')
+    .forEach(function(option) {
+      option.classList.remove('selected');
+    });
 
-  if (!nome || !whatsapp || !objetivo) {
-    showFeedback('Preencha nome, WhatsApp e objetivo para continuar.', 'error');
-    return;
+  element.classList.add('selected');
+
+  var amountElement =
+    document.getElementById(
+      planId + '-amount'
+    );
+
+  var equivalentElement =
+    document.getElementById(
+      planId + '-equiv'
+    );
+
+  if (amountElement) {
+    amountElement.textContent = amount;
   }
 
-  // Salvar no localStorage apenas como backup local; não substitui backend/CRM.
-  const leads = JSON.parse(localStorage.getItem('ce_leads') || '[]');
-  const lead = { id: Date.now(), nome, whatsapp, objetivo, mensagem, data: new Date().toISOString(), status: 'novo' };
-  leads.unshift(lead);
-  localStorage.setItem('ce_leads', JSON.stringify(leads));
+  if (equivalentElement) {
+    equivalentElement.textContent =
+      equivalent;
+  }
+}
 
-  const obj = `Objetivo: ${objetivo}. `;
-  const msg = mensagem ? `/n/n${mensagem}` : '';
-  const text = encodeURIComponent(`Olá Elias! Me chamo ${nome}. Meu WhatsApp é ${whatsapp}. ${obj}Entrei em contato pelo site.${msg}`);
+// ── FORM SUBMIT → WHATSAPP + BACKUP LOCAL
+var leadForm =
+  document.getElementById('leadForm');
 
-  showFeedback('Mensagem registrada. Abrindo WhatsApp...', 'success');
-  window.open(`https://wa.me/5585996639595?text=${text}`, '_blank');
-  this.reset();
-});
+if (leadForm) {
+  leadForm.addEventListener(
+    'submit',
+    function(event) {
+      event.preventDefault();
 
-function showFeedback(msg, type) {
-  const el = document.getElementById('form-feedback');
-  el.textContent = msg;
-  el.style.display = 'block';
-  el.style.background = type === 'success' ? 'rgba(37,211,102,0.1)' : 'rgba(220,50,50,0.1)';
-  el.style.border = type === 'success' ? '1px solid rgba(37,211,102,0.3)' : '1px solid rgba(220,50,50,0.3)';
-  el.style.color = type === 'success' ? '#4ade80' : '#f87171';
-  setTimeout(() => { el.style.display = 'none'; }, 5000);
+      var nameInput =
+        document.getElementById('nome');
+
+      var whatsappInput =
+        document.getElementById('whatsapp');
+
+      var objectiveInput =
+        document.getElementById('objetivo');
+
+      var messageInput =
+        document.getElementById('mensagem');
+
+      var nome = nameInput
+        ? nameInput.value.trim()
+        : '';
+
+      var whatsapp = whatsappInput
+        ? whatsappInput.value.trim()
+        : '';
+
+      var objetivo = objectiveInput
+        ? objectiveInput.value
+        : '';
+
+      var mensagem = messageInput
+        ? messageInput.value.trim()
+        : '';
+
+      if (
+        !nome ||
+        !whatsapp ||
+        !objetivo
+      ) {
+        showFeedback(
+          'Preencha nome, WhatsApp e objetivo para continuar.',
+          'error'
+        );
+
+        return;
+      }
+
+      var leads;
+
+      try {
+        leads = JSON.parse(
+          localStorage.getItem(
+            'ce_leads'
+          ) || '[]'
+        );
+
+        if (!Array.isArray(leads)) {
+          leads = [];
+        }
+      } catch (error) {
+        leads = [];
+      }
+
+      var lead = {
+        id: Date.now(),
+        nome: nome,
+        whatsapp: whatsapp,
+        objetivo: objetivo,
+        mensagem: mensagem,
+        data: new Date().toISOString(),
+        status: 'novo'
+      };
+
+      leads.unshift(lead);
+
+      try {
+        localStorage.setItem(
+          'ce_leads',
+          JSON.stringify(leads)
+        );
+      } catch (error) {
+        console.warn(
+          'Não foi possível salvar o lead localmente.',
+          error
+        );
+      }
+
+      var objectiveText =
+        'Objetivo: ' +
+        objetivo +
+        '. ';
+
+      var messageText =
+        mensagem
+          ? '\n\n' + mensagem
+          : '';
+
+      var text =
+        encodeURIComponent(
+          'Olá Elias! Me chamo ' +
+          nome +
+          '. Meu WhatsApp é ' +
+          whatsapp +
+          '. ' +
+          objectiveText +
+          'Entrei em contato pelo site.' +
+          messageText
+        );
+
+      showFeedback(
+        'Mensagem registrada. Abrindo WhatsApp...',
+        'success'
+      );
+
+      window.open(
+        'https://wa.me/5585996639595?text=' +
+        text,
+        '_blank',
+        'noopener'
+      );
+
+      leadForm.reset();
+    }
+  );
+}
+
+function showFeedback(message, type) {
+  var element =
+    document.getElementById(
+      'form-feedback'
+    );
+
+  if (!element) return;
+
+  element.textContent = message;
+  element.style.display = 'block';
+
+  element.style.background =
+    type === 'success'
+      ? 'rgba(37,211,102,0.1)'
+      : 'rgba(220,50,50,0.1)';
+
+  element.style.border =
+    type === 'success'
+      ? '1px solid rgba(37,211,102,0.3)'
+      : '1px solid rgba(220,50,50,0.3)';
+
+  element.style.color =
+    type === 'success'
+      ? '#4ade80'
+      : '#f87171';
+
+  setTimeout(function() {
+    element.style.display = 'none';
+  }, 5000);
 }
 
 // ── SMOOTH SCROLL PARA LINKS INTERNOS
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const href = a.getAttribute('href');
-    if (!href || href === '#') return;
-    const target = document.querySelector(href);
-    if (!target) return;
-    e.preventDefault();
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-});
+document
+  .querySelectorAll('a[href^="#"]')
+  .forEach(function(anchor) {
+    anchor.addEventListener(
+      'click',
+      function(event) {
+        var href =
+          anchor.getAttribute('href');
 
-// ── CARD 3D TILT: mouse-follow perspective
+        if (
+          !href ||
+          href === '#'
+        ) {
+          return;
+        }
+
+        var target =
+          document.querySelector(href);
+
+        if (!target) return;
+
+        event.preventDefault();
+
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    );
+  });
+
+// ── CARD 3D TILT
 (function() {
-  var cards = document.querySelectorAll('.card-elite');
+  var cards =
+    document.querySelectorAll(
+      '.card-elite'
+    );
+
   cards.forEach(function(card) {
-    card.addEventListener('mousemove', function(e) {
-      var rect = card.getBoundingClientRect();
-      var cx = rect.left + rect.width  / 2;
-      var cy = rect.top  + rect.height / 2;
-      var dx = (e.clientX - cx) / (rect.width  / 2); // -1 a +1
-      var dy = (e.clientY - cy) / (rect.height / 2); // -1 a +1
-      var rx = dy * -4;   // rotação X (tilt vertical)
-      var ry = dx *  5;   // rotação Y (tilt horizontal)
-      card.style.transform =
-        'translateY(-6px) perspective(700px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
-      card.style.boxShadow =
-        (dx * 8) + 'px ' + (dy * 8 + 20) + 'px 48px rgba(1,4,11,0.65), 0 0 0 1px rgba(88,117,133,0.15)';
-    });
-    card.addEventListener('mouseleave', function() {
-      card.style.transform = '';
-      card.style.boxShadow = '';
-    });
+    card.addEventListener(
+      'mousemove',
+      function(event) {
+        var rectangle =
+          card.getBoundingClientRect();
+
+        var centerX =
+          rectangle.left +
+          rectangle.width / 2;
+
+        var centerY =
+          rectangle.top +
+          rectangle.height / 2;
+
+        var distanceX =
+          (
+            event.clientX -
+            centerX
+          ) /
+          (
+            rectangle.width / 2
+          );
+
+        var distanceY =
+          (
+            event.clientY -
+            centerY
+          ) /
+          (
+            rectangle.height / 2
+          );
+
+        var rotateX =
+          distanceY * -4;
+
+        var rotateY =
+          distanceX * 5;
+
+        card.style.transform =
+          'translateY(-6px) ' +
+          'perspective(700px) ' +
+          'rotateX(' +
+          rotateX +
+          'deg) ' +
+          'rotateY(' +
+          rotateY +
+          'deg)';
+
+        card.style.boxShadow =
+          distanceX * 8 +
+          'px ' +
+          (
+            distanceY * 8 +
+            20
+          ) +
+          'px 48px rgba(1,4,11,0.65), ' +
+          '0 0 0 1px rgba(88,117,133,0.15)';
+      }
+    );
+
+    card.addEventListener(
+      'mouseleave',
+      function() {
+        card.style.transform = '';
+        card.style.boxShadow = '';
+      }
+    );
   });
 })();
 
 // ══════════════════════════════════════════════════════════════
-// CARROSSEL DE TRANSFORMAÇÕES — drag, touch, setas, dots, teclado
+// CARROSSEL DE TRANSFORMAÇÕES
+// Atual nítido + anterior e próximo com blur
 // ══════════════════════════════════════════════════════════════
 (function() {
-  var track    = document.getElementById('transfTrack');
-  var viewport = document.getElementById('transfViewport');
-  var dotsWrap = document.getElementById('transfDots');
-  var btnPrev  = document.getElementById('transfPrev');
-  var btnNext  = document.getElementById('transfNext');
-  if (!track || !viewport) return;
+  var track =
+    document.getElementById(
+      'transfTrack'
+    );
 
-  // ── 1. Clonar primeiro e último card para criar o loop infinito ───────────
-  // Estrutura: [clone-último] [card0] [card1] [card2] [card3] [clone-primeiro]
-  // O usuário sempre vê o intervalo [1..N], os clones são o "truque"
-  var originals = Array.from(track.querySelectorAll('.transf-card'));
-  var total     = originals.length;
+  var viewport =
+    document.getElementById(
+      'transfViewport'
+    );
 
-  var cloneFirst = originals[0].cloneNode(true);
-  var cloneLast  = originals[total - 1].cloneNode(true);
-  cloneFirst.setAttribute('aria-hidden', 'true');
-  cloneLast.setAttribute('aria-hidden', 'true');
+  var dotsWrapper =
+    document.getElementById(
+      'transfDots'
+    );
 
-  track.appendChild(cloneFirst);           // clone do 1º no final
-  track.insertBefore(cloneLast, originals[0]); // clone do último no início
+  var previousButton =
+    document.getElementById(
+      'transfPrev'
+    );
 
-  // Todos os cards (incluindo clones) — ordem: [cloneLast, 0,1,2,3, cloneFirst]
-  var allCards = Array.from(track.querySelectorAll('.transf-card'));
-  // current aponta para o índice em allCards — começa em 1 (primeiro original)
-  var current  = 1;
-  var isJumping = false;
+  var nextButton =
+    document.getElementById(
+      'transfNext'
+    );
 
-  // ── 2. Criar dots (só para os originais) ─────────────────────────────────
-  dotsWrap.innerHTML = '';
-  var dots = originals.map(function(_, i) {
-    var d = document.createElement('button');
-    d.className = 'transf-dot' + (i === 0 ? ' active' : '');
-    d.setAttribute('aria-label', 'Slide ' + (i + 1));
-    d.onclick = function() { goTo(i + 1); }; // +1 por causa do clone no início
-    dotsWrap.appendChild(d);
-    return d;
-  });
-
-  // ── 3. Posicionar e aplicar estado visual ─────────────────────────────────
-  function getOffset(idx) {
-    var card = allCards[idx];
-    if (!card) return 0;
-    var cardLeft = card.offsetLeft;
-    var cardW    = card.offsetWidth;
-    var viewW    = viewport.offsetWidth;
-    return cardLeft - (viewW - cardW) / 2;
+  if (
+    !track ||
+    !viewport ||
+    !dotsWrapper
+  ) {
+    return;
   }
 
-  function updateVisual(withTransition) {
-    // Ativar/desativar cards
-    allCards.forEach(function(card, i) {
-      card.classList.toggle('active', i === current);
+  track
+    .querySelectorAll(
+      '[data-transf-clone="true"]'
+    )
+    .forEach(function(clone) {
+      clone.remove();
     });
 
-    // Dots — índice real = current - 1 (descontar o clone inicial)
-    var dotIdx = current - 1;
-    if (dotIdx < 0)      dotIdx = total - 1;
-    if (dotIdx >= total) dotIdx = 0;
-    dots.forEach(function(d, i) { d.classList.toggle('active', i === dotIdx); });
+  var originalCards =
+    Array.from(
+      track.querySelectorAll(
+        '.transf-card'
+      )
+    );
 
-    // Setas nunca desativam (loop infinito)
-    if (btnPrev) btnPrev.disabled = false;
-    if (btnNext) btnNext.disabled = false;
+  var total =
+    originalCards.length;
+
+  if (!total) return;
+
+  var allCards =
+    originalCards.slice();
+
+  var currentIndex = 0;
+  var isJumping = false;
+  var isAnimating = false;
+  var resizeFrame = 0;
+
+  if (total > 1) {
+    var firstClone =
+      originalCards[0]
+        .cloneNode(true);
+
+    var lastClone =
+      originalCards[
+        total - 1
+      ].cloneNode(true);
+
+    firstClone.dataset.transfClone =
+      'true';
+
+    lastClone.dataset.transfClone =
+      'true';
+
+    firstClone.setAttribute(
+      'aria-hidden',
+      'true'
+    );
+
+    lastClone.setAttribute(
+      'aria-hidden',
+      'true'
+    );
+
+    track.appendChild(firstClone);
+
+    track.insertBefore(
+      lastClone,
+      originalCards[0]
+    );
+
+    allCards =
+      Array.from(
+        track.querySelectorAll(
+          '.transf-card'
+        )
+      );
+
+    currentIndex = 1;
   }
 
-  function setPos(idx, animated) {
-    track.style.transition = animated
-      ? 'transform 0.55s cubic-bezier(0.4, 0, 0.2, 1)'
-      : 'none';
-    track.style.transform  = 'translateX(' + (-getOffset(idx)) + 'px)';
+  viewport.setAttribute(
+    'tabindex',
+    '0'
+  );
+
+  viewport.setAttribute(
+    'role',
+    'region'
+  );
+
+  viewport.setAttribute(
+    'aria-label',
+    'Carrossel de transformações corporais'
+  );
+
+  dotsWrapper.innerHTML = '';
+
+  var dots =
+    originalCards.map(
+      function(card, index) {
+        var dot =
+          document.createElement(
+            'button'
+          );
+
+        dot.type = 'button';
+
+        dot.className =
+          'transf-dot' +
+          (
+            index === 0
+              ? ' active'
+              : ''
+          );
+
+        dot.setAttribute(
+          'aria-label',
+          'Ir para transformação ' +
+          (
+            index + 1
+          )
+        );
+
+        dot.setAttribute(
+          'aria-current',
+          index === 0
+            ? 'true'
+            : 'false'
+        );
+
+        dot.addEventListener(
+          'click',
+          function() {
+            goTo(
+              total > 1
+                ? index + 1
+                : index,
+              true
+            );
+          }
+        );
+
+        dotsWrapper.appendChild(dot);
+
+        return dot;
+      }
+    );
+
+  function getRealIndex() {
+    if (total <= 1) {
+      return 0;
+    }
+
+    var index =
+      currentIndex - 1;
+
+    if (index < 0) {
+      index = total - 1;
+    }
+
+    if (index >= total) {
+      index = 0;
+    }
+
+    return index;
   }
 
-  function goTo(idx, animated) {
-    if (animated === undefined) animated = true;
-    current = idx;
-    setPos(current, animated);
+  function getOffset(index) {
+    var card =
+      allCards[index];
+
+    if (!card) return 0;
+
+    var cardLeft =
+      card.offsetLeft;
+
+    var cardWidth =
+      card.offsetWidth;
+
+    var viewportWidth =
+      viewport.clientWidth;
+
+    return Math.round(
+      cardLeft -
+      (
+        viewportWidth -
+        cardWidth
+      ) / 2
+    );
+  }
+
+  function updateVisual() {
+    var previousIndex =
+      currentIndex - 1;
+
+    var nextIndex =
+      currentIndex + 1;
+
+    allCards.forEach(
+      function(card, index) {
+        var active =
+          index === currentIndex;
+
+        var previous =
+          total > 1 &&
+          index === previousIndex;
+
+        var next =
+          total > 1 &&
+          index === nextIndex;
+
+        var hidden =
+          !active &&
+          !previous &&
+          !next;
+
+        card.classList.toggle(
+          'active',
+          active
+        );
+
+        card.classList.toggle(
+          'is-prev',
+          previous
+        );
+
+        card.classList.toggle(
+          'is-next',
+          next
+        );
+
+        card.classList.toggle(
+          'is-hidden',
+          hidden
+        );
+
+        card.setAttribute(
+          'aria-hidden',
+          active
+            ? 'false'
+            : 'true'
+        );
+      }
+    );
+
+    var realIndex =
+      getRealIndex();
+
+    dots.forEach(
+      function(dot, index) {
+        var active =
+          index === realIndex;
+
+        dot.classList.toggle(
+          'active',
+          active
+        );
+
+        dot.setAttribute(
+          'aria-current',
+          active
+            ? 'true'
+            : 'false'
+        );
+      }
+    );
+
+    if (previousButton) {
+      previousButton.disabled = false;
+    }
+
+    if (nextButton) {
+      nextButton.disabled = false;
+    }
+  }
+
+  function setPosition(
+    index,
+    animated
+  ) {
+    track.style.transition =
+      animated
+        ? 'transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)'
+        : 'none';
+
+    track.style.transform =
+      'translate3d(' +
+      -getOffset(index) +
+      'px, 0, 0)';
+  }
+
+  function goTo(
+    index,
+    animated
+  ) {
+    if (animated === undefined) {
+      animated = true;
+    }
+
+    if (total <= 1) {
+      currentIndex = 0;
+    } else {
+      currentIndex = index;
+    }
+
+    setPosition(
+      currentIndex,
+      animated
+    );
+
     updateVisual();
   }
 
-  // ── 4. Jump silencioso ao atingir clone ──────────────────────────────────
-  // Quando a transição termina e estamos num clone, saltar para o original sem animação
-  track.addEventListener('transitionend', function(e) {
-    if (e.target !== track || e.propertyName !== 'transform') return;
-    if (isJumping) return;
-    if (current === 0) {
-      isJumping = true;
-      goTo(total, false);
-      requestAnimationFrame(function() {
-        requestAnimationFrame(function() { isJumping = false; });
-      });
-    } else if (current === allCards.length - 1) {
-      isJumping = true;
-      goTo(1, false);
-      requestAnimationFrame(function() {
-        requestAnimationFrame(function() { isJumping = false; });
-      });
+  function refreshPosition() {
+    cancelAnimationFrame(
+      resizeFrame
+    );
+
+    resizeFrame =
+      requestAnimationFrame(
+        function() {
+          goTo(
+            currentIndex,
+            false
+          );
+        }
+      );
+  }
+
+  track.addEventListener(
+    'transitionstart',
+    function(event) {
+      if (
+        event.target === track &&
+        event.propertyName ===
+          'transform'
+      ) {
+        isAnimating = true;
+      }
     }
-  });
+  );
 
-  // ── 5. Drag / swipe ──────────────────────────────────────────────────────
-  var startX = 0, isDragging = false, startOffset = 0;
-  var isAnimating = false;
+  track.addEventListener(
+    'transitionend',
+    function(event) {
+      if (
+        event.target !== track ||
+        event.propertyName !==
+          'transform'
+      ) {
+        return;
+      }
 
-  // Trava contra cliques rápidos durante a transição
-  track.addEventListener('transitionstart', function(e) {
-    if (e.target === track && e.propertyName === 'transform') isAnimating = true;
-  });
-  track.addEventListener('transitionend', function(e) {
-    if (e.target === track && e.propertyName === 'transform') isAnimating = false;
-  }, true); // capture para garantir antes do handler do loop
+      isAnimating = false;
 
-  function dragStart(x) {
-    startX      = x;
-    isDragging  = true;
-    startOffset = getOffset(current);
-    track.classList.add('dragging');
-    track.style.transition = 'none';
+      if (
+        total <= 1 ||
+        isJumping
+      ) {
+        return;
+      }
+
+      if (currentIndex === 0) {
+        isJumping = true;
+
+        goTo(
+          total,
+          false
+        );
+
+        requestAnimationFrame(
+          function() {
+            requestAnimationFrame(
+              function() {
+                isJumping = false;
+              }
+            );
+          }
+        );
+      } else if (
+        currentIndex ===
+        allCards.length - 1
+      ) {
+        isJumping = true;
+
+        goTo(
+          1,
+          false
+        );
+
+        requestAnimationFrame(
+          function() {
+            requestAnimationFrame(
+              function() {
+                isJumping = false;
+              }
+            );
+          }
+        );
+      }
+    }
+  );
+
+  // ── DRAG / SWIPE
+  var startX = 0;
+  var lastX = 0;
+  var startOffset = 0;
+  var dragging = false;
+  var pointerId = null;
+
+  function dragStart(event) {
+    if (
+      total <= 1 ||
+      event.button > 0
+    ) {
+      return;
+    }
+
+    pointerId =
+      event.pointerId;
+
+    startX =
+      event.clientX;
+
+    lastX = startX;
+
+    startOffset =
+      getOffset(currentIndex);
+
+    dragging = true;
+
+    track.classList.add(
+      'dragging'
+    );
+
+    track.style.transition =
+      'none';
+
+    if (
+      viewport.setPointerCapture &&
+      pointerId !== undefined
+    ) {
+      viewport.setPointerCapture(
+        pointerId
+      );
+    }
   }
-  function dragMove(x) {
-    if (!isDragging) return;
-    var delta = x - startX;
-    track.style.transform = 'translateX(' + (-(startOffset - delta)) + 'px)';
+
+  function dragMove(event) {
+    if (
+      !dragging ||
+      event.pointerId !== pointerId
+    ) {
+      return;
+    }
+
+    lastX =
+      event.clientX;
+
+    var delta =
+      lastX - startX;
+
+    track.style.transform =
+      'translate3d(' +
+      -(
+        startOffset -
+        delta
+      ) +
+      'px, 0, 0)';
   }
-  function dragEnd(x) {
-    if (!isDragging) return;
-    isDragging = false;
-    track.classList.remove('dragging');
-    var delta = x - startX;
-    if      (delta < -50) goTo(current + 1);
-    else if (delta >  50) goTo(current - 1);
-    else                  goTo(current);
+
+  function dragEnd(event) {
+    if (
+      !dragging ||
+      event.pointerId !== pointerId
+    ) {
+      return;
+    }
+
+    dragging = false;
+
+    track.classList.remove(
+      'dragging'
+    );
+
+    var delta =
+      lastX - startX;
+
+    if (
+      Math.abs(delta) >= 50
+    ) {
+      goTo(
+        currentIndex +
+        (
+          delta < 0
+            ? 1
+            : -1
+        ),
+        true
+      );
+    } else {
+      goTo(
+        currentIndex,
+        true
+      );
+    }
+
+    if (
+      viewport.hasPointerCapture &&
+      viewport.hasPointerCapture(
+        pointerId
+      )
+    ) {
+      viewport.releasePointerCapture(
+        pointerId
+      );
+    }
+
+    pointerId = null;
   }
 
-  track.addEventListener('mousedown',  function(e) { dragStart(e.clientX); });
-  window.addEventListener('mousemove', function(e) { if (isDragging) dragMove(e.clientX); });
-  window.addEventListener('mouseup',   function(e) { dragEnd(e.clientX); });
-  track.addEventListener('touchstart', function(e) { dragStart(e.touches[0].clientX); }, { passive: true });
-  track.addEventListener('touchmove',  function(e) { dragMove(e.touches[0].clientX); },  { passive: true });
-  track.addEventListener('touchend',   function(e) { dragEnd(e.changedTouches[0].clientX); });
+  viewport.addEventListener(
+    'pointerdown',
+    dragStart
+  );
 
-  // ── 6. Resize ────────────────────────────────────────────────────────────
-  window.addEventListener('resize', function() { goTo(current, false); });
+  viewport.addEventListener(
+    'pointermove',
+    dragMove
+  );
 
-  // ── 7. API global ────────────────────────────────────────────────────────
-  window.transfSlide = function(dir) {
-    if (isAnimating || isJumping) return;
-    goTo(current + dir);
-  };
+  viewport.addEventListener(
+    'pointerup',
+    dragEnd
+  );
 
-  // ── 8. Init ──────────────────────────────────────────────────────────────
-  requestAnimationFrame(function() { goTo(1, false); });
+  viewport.addEventListener(
+    'pointercancel',
+    dragEnd
+  );
+
+  viewport.addEventListener(
+    'keydown',
+    function(event) {
+      if (
+        event.key ===
+        'ArrowLeft'
+      ) {
+        event.preventDefault();
+
+        window.transfSlide(-1);
+      }
+
+      if (
+        event.key ===
+        'ArrowRight'
+      ) {
+        event.preventDefault();
+
+        window.transfSlide(1);
+      }
+    }
+  );
+
+  window.transfSlide =
+    function(direction) {
+      if (
+        total <= 1 ||
+        isAnimating ||
+        isJumping ||
+        dragging
+      ) {
+        return;
+      }
+
+      goTo(
+        currentIndex +
+        direction,
+        true
+      );
+    };
+
+  window.addEventListener(
+    'resize',
+    refreshPosition,
+    { passive: true }
+  );
+
+  window.addEventListener(
+    'orientationchange',
+    refreshPosition,
+    { passive: true }
+  );
+
+  if (
+    'ResizeObserver' in window
+  ) {
+    var resizeObserver =
+      new ResizeObserver(
+        refreshPosition
+      );
+
+    resizeObserver.observe(
+      viewport
+    );
+  }
+
+  track
+    .querySelectorAll('img')
+    .forEach(function(image) {
+      image.setAttribute(
+        'draggable',
+        'false'
+      );
+
+      if (!image.complete) {
+        image.addEventListener(
+          'load',
+          refreshPosition,
+          { once: true }
+        );
+      }
+    });
+
+  requestAnimationFrame(
+    function() {
+      requestAnimationFrame(
+        function() {
+          goTo(
+            total > 1
+              ? 1
+              : 0,
+            false
+          );
+        }
+      );
+    }
+  );
 })();
 
-
-// ── COUNTUP: dispara APÓS a animação de entrada dos stats completar
+// ── COUNTUP
 (function() {
-  var statsEls = document.querySelectorAll('.hero-stat-num[data-target]');
-  if (!statsEls.length) return;
+  var statisticElements =
+    document.querySelectorAll(
+      '.hero-stat-num[data-target]'
+    );
+
+  if (!statisticElements.length) {
+    return;
+  }
 
   var fired = false;
 
-  // ── Curva de easing: desacelera ao chegar no final
-  function easeOutExpo(t) {
-    return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+  function easeOutExpo(time) {
+    return time === 1
+      ? 1
+      : 1 -
+        Math.pow(
+          2,
+          -10 * time
+        );
   }
 
-  // ── Anima um elemento de 0 até o target
-  function animateCount(el, delay) {
-    var target   = parseInt(el.getAttribute('data-target'), 10);
-    var suffix   = el.getAttribute('data-suffix') || '';
-    // Duração proporcional ao valor: números maiores sobem mais devagar
-    var duration = target >= 100 ? 2200 : target >= 10 ? 1600 : 1000;
-    var start    = null;
+  function animateCount(
+    element,
+    delay
+  ) {
+    var target =
+      parseInt(
+        element.getAttribute(
+          'data-target'
+        ),
+        10
+      );
 
-    setTimeout(function() {
-      function step(ts) {
-        if (!start) start = ts;
-        var progress = Math.min((ts - start) / duration, 1);
-        var eased    = easeOutExpo(progress);
-        var current  = Math.round(eased * target);
-        el.textContent = current + suffix;
-        if (progress < 1) {
-          requestAnimationFrame(step);
-        } else {
-          el.textContent = target + suffix; // garantir valor exato no fim
-        }
-      }
-      requestAnimationFrame(step);
-    }, delay);
-  }
+    var suffix =
+      element.getAttribute(
+        'data-suffix'
+      ) || '';
 
-  // ── Dispara todos os contadores com stagger
-  function fireCounters() {
-    if (fired) return;
-    fired = true;
-    statsEls.forEach(function(el, i) {
-      animateCount(el, i * 280); // 280ms de stagger entre cada número
-    });
-  }
+    var duration =
+      target >= 100
+        ? 2200
+        : target >= 10
+          ? 1600
+          : 1000;
 
-  // ── Estratégia de trigger: aguarda a animação do hero terminar
-  // A transição CSS dos stats dura 600ms + delay 750ms = ~1350ms após hero-animated
-  // Usamos MutationObserver para detectar quando hero-animated é adicionado
-  var heroContent = document.getElementById('heroContent');
-  if (heroContent) {
-    var mutObs = new MutationObserver(function(mutations) {
-      mutations.forEach(function(m) {
-        if (m.type === 'attributes' && m.attributeName === 'class') {
-          if (heroContent.classList.contains('hero-animated')) {
-            mutObs.disconnect();
-            // Aguarda a transição dos stats completar: delay(750ms) + transition(600ms) + margem(100ms)
-            setTimeout(fireCounters, 1450);
+    var start = null;
+
+    setTimeout(
+      function() {
+        function step(timestamp) {
+          if (!start) {
+            start = timestamp;
+          }
+
+          var progress =
+            Math.min(
+              (
+                timestamp -
+                start
+              ) /
+              duration,
+              1
+            );
+
+          var eased =
+            easeOutExpo(
+              progress
+            );
+
+          var current =
+            Math.round(
+              eased * target
+            );
+
+          element.textContent =
+            current + suffix;
+
+          if (progress < 1) {
+            requestAnimationFrame(
+              step
+            );
+          } else {
+            element.textContent =
+              target + suffix;
           }
         }
-      });
-    });
-    mutObs.observe(heroContent, { attributes: true });
+
+        requestAnimationFrame(
+          step
+        );
+      },
+      delay
+    );
   }
 
-  // ── Fallback: se hero-animated já foi adicionado antes do script rodar
-  if (heroContent && heroContent.classList.contains('hero-animated')) {
-    setTimeout(fireCounters, 800);
+  function fireCounters() {
+    if (fired) return;
+
+    fired = true;
+
+    statisticElements.forEach(
+      function(element, index) {
+        animateCount(
+          element,
+          index * 280
+        );
+      }
+    );
   }
 
-  // ── Fallback final: dispara de qualquer forma após 3s
-  setTimeout(function() {
-    if (!fired) fireCounters();
-  }, 3000);
+  var heroContent =
+    document.getElementById(
+      'heroContent'
+    );
+
+  if (heroContent) {
+    var mutationObserver =
+      new MutationObserver(
+        function(mutations) {
+          mutations.forEach(
+            function(mutation) {
+              if (
+                mutation.type ===
+                  'attributes' &&
+                mutation.attributeName ===
+                  'class' &&
+                heroContent.classList
+                  .contains(
+                    'hero-animated'
+                  )
+              ) {
+                mutationObserver
+                  .disconnect();
+
+                setTimeout(
+                  fireCounters,
+                  1450
+                );
+              }
+            }
+          );
+        }
+      );
+
+    mutationObserver.observe(
+      heroContent,
+      {
+        attributes: true
+      }
+    );
+  }
+
+  if (
+    heroContent &&
+    heroContent.classList
+      .contains(
+        'hero-animated'
+      )
+  ) {
+    setTimeout(
+      fireCounters,
+      800
+    );
+  }
+
+  setTimeout(
+    function() {
+      if (!fired) {
+        fireCounters();
+      }
+    },
+    3000
+  );
 })();
 
-
-// ── SIMULADOR PAC — InfinitePay
+// ══════════════════════════════════════════════════════════════
+// SIMULADOR INFINITEPAY
+// Fonte de verdade: tabelas-infinitepay-elias.js
+// Consulta possui apenas:
+// 0 = Consulta
+// 1 = Presencial
+// ══════════════════════════════════════════════════════════════
 (function() {
-  // Simulador usando INFINITEPAY_APPROVED_DATA as source of truth
-  if (typeof INFINITEPAY_APPROVED_DATA === 'undefined') {
-    console.error('Dados comerciais da InfinitePay não foram carregados.');
+  'use strict';
+
+  if (
+    typeof INFINITEPAY_APPROVED_DATA ===
+      'undefined' ||
+    !INFINITEPAY_APPROVED_DATA.plans
+  ) {
+    console.error(
+      'Dados comerciais da InfinitePay não foram carregados. ' +
+      'Carregue tabelas-infinitepay-elias.js antes de scripts.js.'
+    );
+
     return;
   }
-  var DATA = INFINITEPAY_APPROVED_DATA;
 
-  var OPTION_KEYS = {
-    lite: ['mensal','trimestral','semestral','anual'],
-    vip:  ['mensal','trimestral','semestral','anual'],
-    consulta: ['retorno','online','presencial']
+  var DATA =
+    INFINITEPAY_APPROVED_DATA;
+
+  var FALLBACK_OPTION_KEYS = {
+    lite: [
+      'mensal',
+      'trimestral',
+      'semestral',
+      'anual'
+    ],
+
+    vip: [
+      'mensal',
+      'trimestral',
+      'semestral',
+      'anual'
+    ],
+
+    consulta: [
+      'consulta',
+      'presencial'
+    ]
   };
 
-  var SIM = { lite:{mod:0,mode:'pix',parc:1}, vip:{mod:0,mode:'pix',parc:1}, consulta:{mod:2,mode:'pix',parc:1} };
-  var PERIOD = { lite:0, vip:0, consulta:2 };
+  var SIM = {
+    lite: {
+      option: 'mensal',
+      mode: 'pix',
+      parc: 1
+    },
 
-  const currencyFormatter = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
-  function formatCurrency(value) { return currencyFormatter.format(value); }
+    vip: {
+      option: 'mensal',
+      mode: 'pix',
+      parc: 1
+    },
 
-  function getPlanKey(id) { return id === 'consulta' ? 'consultas' : id; }
-  function getOptionKey(id, idx) { return OPTION_KEYS[id] && OPTION_KEYS[id][idx]; }
+    consulta: {
+      option: 'consulta',
+      mode: 'pix',
+      parc: 1
+    }
+  };
+
+  var PERIOD_SUFFIX = {
+    lite: {
+      mensal: '/mês',
+      trimestral: '/3 meses',
+      semestral: '/6 meses',
+      anual: '/ano'
+    },
+
+    vip: {
+      mensal: '/mês',
+      trimestral: '/3 meses',
+      semestral: '/6 meses',
+      anual: '/ano'
+    },
+
+    consulta: {
+      consulta: '',
+      presencial: ''
+    }
+  };
+
+  var currencyFormatter =
+    new Intl.NumberFormat(
+      'pt-BR',
+      {
+        style: 'currency',
+        currency: 'BRL'
+      }
+    );
+
+  function formatCurrency(value) {
+    return currencyFormatter.format(
+      value
+    );
+  }
+
+  function getPlan(id) {
+    return (
+      DATA.plans[id] ||
+      null
+    );
+  }
+
+  function getOptionKeys(id) {
+    var plan =
+      getPlan(id);
+
+    if (
+      plan &&
+      Array.isArray(
+        plan.optionOrder
+      )
+    ) {
+      return plan.optionOrder;
+    }
+
+    return (
+      FALLBACK_OPTION_KEYS[id] ||
+      []
+    );
+  }
+
+  function resolveOptionKey(
+    id,
+    selection
+  ) {
+    var keys =
+      getOptionKeys(id);
+
+    if (
+      typeof selection ===
+      'number'
+    ) {
+      return keys[selection];
+    }
+
+    if (
+      typeof selection ===
+        'string' &&
+      /^\d+$/.test(selection)
+    ) {
+      return keys[
+        Number(selection)
+      ];
+    }
+
+    return selection;
+  }
+
+  function getOption(id) {
+    var plan =
+      getPlan(id);
+
+    var state =
+      SIM[id];
+
+    if (
+      !plan ||
+      !state ||
+      !plan.options
+    ) {
+      return null;
+    }
+
+    return (
+      plan.options[
+        state.option
+      ] ||
+      null
+    );
+  }
+
+  function getCard(
+    id,
+    source
+  ) {
+    if (
+      source &&
+      source.closest
+    ) {
+      var sourceCard =
+        source.closest(
+          '.plans-alt-card'
+        );
+
+      if (sourceCard) {
+        return sourceCard;
+      }
+    }
+
+    var tabs =
+      document.getElementById(
+        'sim-mods-' + id
+      );
+
+    return tabs
+      ? tabs.closest(
+          '.plans-alt-card'
+        )
+      : null;
+  }
+
+  function updateCardHeader(
+    id,
+    card
+  ) {
+    if (!card) return;
+
+    var option =
+      getOption(id);
+
+    if (!option) return;
+
+    var priceElement =
+      card.querySelector(
+        '.pac-amount'
+      );
+
+    var periodElement =
+      card.querySelector(
+        '.pac-period'
+      );
+
+    var descriptionElement =
+      card.querySelector(
+        '.pac-equiv'
+      );
+
+    var parts =
+      option.base
+        .toFixed(2)
+        .split('.');
+
+    if (priceElement) {
+      priceElement.textContent =
+        Number(parts[0])
+          .toLocaleString(
+            'pt-BR'
+          );
+    }
+
+    if (periodElement) {
+      var suffix =
+        PERIOD_SUFFIX[id] &&
+        PERIOD_SUFFIX[id][
+          SIM[id].option
+        ]
+          ? PERIOD_SUFFIX[id][
+              SIM[id].option
+            ]
+          : '';
+
+      periodElement.textContent =
+        ',' +
+        parts[1] +
+        suffix;
+    }
+
+    if (
+      descriptionElement &&
+      option.description
+    ) {
+      descriptionElement.textContent =
+        option.description;
+    }
+  }
+
+  function syncPeriodRows(
+    id,
+    card
+  ) {
+    if (!card) return;
+
+    var selectedIndex =
+      getOptionKeys(id)
+        .indexOf(
+          SIM[id].option
+        );
+
+    card
+      .querySelectorAll(
+        '.pac-period-row'
+      )
+      .forEach(
+        function(row, index) {
+          var active =
+            index ===
+            selectedIndex;
+
+          row.classList.toggle(
+            'active',
+            active
+          );
+
+          row.setAttribute(
+            'aria-pressed',
+            active
+              ? 'true'
+              : 'false'
+          );
+        }
+      );
+  }
+
+  function syncSimulatorButtons(id) {
+    var tabs =
+      document.getElementById(
+        'sim-mods-' + id
+      );
+
+    if (!tabs) return;
+
+    var selectedIndex =
+      getOptionKeys(id)
+        .indexOf(
+          SIM[id].option
+        );
+
+    tabs
+      .querySelectorAll(
+        '.pac-sim-mod-btn'
+      )
+      .forEach(
+        function(button, index) {
+          var active =
+            index ===
+            selectedIndex;
+
+          button.classList.toggle(
+            'active',
+            active
+          );
+
+          button.setAttribute(
+            'aria-pressed',
+            active
+              ? 'true'
+              : 'false'
+          );
+        }
+      );
+  }
+
+  function resetInstallments(id) {
+    if (!SIM[id]) return;
+
+    SIM[id].parc = 1;
+
+    document
+      .querySelectorAll(
+        '#pac-parc-' +
+        id +
+        ' .pac-parc-btn'
+      )
+      .forEach(
+        function(button, index) {
+          var active =
+            index === 0;
+
+          button.classList.toggle(
+            'active',
+            active
+          );
+
+          button.setAttribute(
+            'aria-pressed',
+            active
+              ? 'true'
+              : 'false'
+          );
+        }
+      );
+  }
+
+  function updateConsultaCTA() {
+    var option =
+      getOption('consulta');
+
+    var cta =
+      document.getElementById(
+        'pac-cta-consulta'
+      );
+
+    if (
+      !option ||
+      !cta
+    ) {
+      return;
+    }
+
+    cta.textContent =
+      option.ctaLabel ||
+      'AGENDAR CONSULTA →';
+
+    var message =
+      option.whatsappText ||
+      'Olá Elias! Tenho interesse na consulta.';
+
+    cta.href =
+      'https://wa.me/5585996639595?text=' +
+      encodeURIComponent(
+        message
+      );
+  }
 
   function render(id) {
-    var s = SIM[id];
-    var planKey = getPlanKey(id);
-    var optionKey = getOptionKey(id, s.mod);
-    var el = document.getElementById('pac-result-' + id);
-    if (!el) return;
+    var state =
+      SIM[id];
 
-    var plan = DATA.plans && DATA.plans[planKey];
-    var option = plan && plan.options && optionKey ? plan.options[optionKey] : null;
-    var base = option && typeof option.base === 'number' ? option.base : 0;
-    var lbl = option && option.label ? option.label : '';
+    var option =
+      getOption(id);
 
-    if (s.mode === 'pix') {
-      el.innerHTML =
-        '<div class="pac-result-tag">PIX · TAXA 0% · ' + lbl + '</div>' +
-        '<div class="pac-result-val">' + formatCurrency(base) + '</div>' +
-        '<div class="pac-result-sub">Valor cobrado do cliente, sem acréscimo.</div>';
+    var resultElement =
+      document.getElementById(
+        'pac-result-' + id
+      );
+
+    if (
+      !state ||
+      !option ||
+      !resultElement
+    ) {
       return;
     }
 
-    // Crédito: use dados tabelados diretamente
-    var p = s.parc;
-    var credit = option && option.credit && option.credit[p] ? option.credit[p] : null;
+    if (
+      state.mode === 'pix'
+    ) {
+      resultElement.innerHTML =
+        '<div class="pac-result-tag">' +
+          'PIX · TAXA 0% · ' +
+          option.label +
+        '</div>' +
+
+        '<div class="pac-result-val">' +
+          formatCurrency(
+            option.base
+          ) +
+        '</div>' +
+
+        '<div class="pac-result-sub">' +
+          'Valor cobrado do cliente, sem acréscimo.' +
+        '</div>';
+
+      return;
+    }
+
+    var credit =
+      option.credit &&
+      option.credit[
+        state.parc
+      ];
+
     if (!credit) {
-      el.innerHTML = '<div class="pac-result-tag">Crédito</div><div class="pac-result-val">-</div>';
+      resultElement.innerHTML =
+        '<div class="pac-result-tag">' +
+          'CRÉDITO · ' +
+          option.label +
+        '</div>' +
+
+        '<div class="pac-result-val">' +
+          '—' +
+        '</div>' +
+
+        '<div class="pac-result-sub">' +
+          'Valor indisponível para esta parcela.' +
+        '</div>';
+
       return;
     }
 
-    el.innerHTML =
-      '<div class="pac-result-tag">CRÉDITO EM ' + p + 'X · TAXA INCLUÍDA</div>' +
-      '<div class="pac-result-val">' + p + 'x de ' + formatCurrency(credit.installment) + '</div>' +
-      '<div class="pac-result-sub" style="display:flex;flex-direction:column;margin-top:6px">' +
-        '<span>Total no cartão: ' + formatCurrency(credit.total) + '</span>' +
-        '<span>Valor-base do plano: ' + formatCurrency(base) + '</span>' +
+    resultElement.innerHTML =
+      '<div class="pac-result-tag">' +
+        'CRÉDITO EM ' +
+        state.parc +
+        'X · TAXA INCLUÍDA · ' +
+        option.label +
+      '</div>' +
+
+      '<div class="pac-result-val">' +
+        state.parc +
+        'x de ' +
+        formatCurrency(
+          credit.installment
+        ) +
+      '</div>' +
+
+      '<div class="pac-result-sub" ' +
+        'style="' +
+          'display:flex;' +
+          'flex-direction:column;' +
+          'gap:2px;' +
+          'margin-top:6px' +
+        '">' +
+
+        '<span>' +
+          'Total no cartão: ' +
+          formatCurrency(
+            credit.total
+          ) +
+        '</span>' +
+
+        '<span>' +
+          'Valor-base: ' +
+          formatCurrency(
+            option.base
+          ) +
+        '</span>' +
+
       '</div>';
   }
 
-  function updateCardPrice(id, idx, cardOrElement) {
-    var card = cardOrElement && cardOrElement.closest ? (cardOrElement.closest('.plans-alt-card') || cardOrElement) : cardOrElement;
-    if (!card) return;
-    var priceEl = card.querySelector('.pac-amount');
-    var periodEl = card.querySelector('.pac-period');
-    if (!priceEl || !periodEl) return;
+  function refresh(
+    id,
+    source
+  ) {
+    var card =
+      getCard(
+        id,
+        source
+      );
 
-    var planKey = getPlanKey(id);
-    var optionKey = getOptionKey(id, idx);
-    var option = DATA.plans && DATA.plans[planKey] && DATA.plans[planKey].options && DATA.plans[planKey].options[optionKey];
-    if (!option) return;
-    var base = option.base;
-    var parts = base.toFixed(2).split('.');
-    priceEl.textContent = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    updateCardHeader(
+      id,
+      card
+    );
 
-    var suffix = '';
-    if (id !== 'consulta') {
-      if (idx === 0) suffix = '/mês';
-      else if (idx === 1) suffix = '/3 meses';
-      else if (idx === 2) suffix = '/6 meses';
-      else suffix = '/ano';
+    syncPeriodRows(
+      id,
+      card
+    );
+
+    syncSimulatorButtons(id);
+
+    render(id);
+
+    if (id === 'consulta') {
+      updateConsultaCTA();
     }
-    periodEl.textContent = ',' + parts[1] + suffix;
   }
 
-  function syncCardPeriodRows(card, idx) {
-    if (!card) return;
-    card.querySelectorAll('.pac-period-row').forEach(function(row, index) {
-      var active = index === idx;
-      row.classList.toggle('active', active);
-      row.setAttribute('aria-pressed', active ? 'true' : 'false');
-    });
-  }
+  window.pacSetMod =
+    function(
+      id,
+      selection,
+      button
+    ) {
+      var plan =
+        getPlan(id);
 
-  function syncSimButtons(id, idx) {
-    var simSection = document.getElementById('sim-mods-' + id);
-    if (!simSection) return;
-    simSection.querySelectorAll('.pac-sim-mod-btn').forEach(function(b, index) {
-      b.classList.toggle('active', index === idx);
-    });
-  }
+      var optionKey =
+        resolveOptionKey(
+          id,
+          selection
+        );
 
-  window.simSetMod = function(id, idx, btn) {
-    PERIOD[id] = idx;
-    SIM[id].mod = idx;
-    syncSimButtons(id, idx);
-    var card = btn.closest('.plans-alt-card');
-    if (card) {
-      syncCardPeriodRows(card, idx);
-      updateCardPrice(id, idx, card);
-    }
-    render(id);
-    // table feature removed
-  };
+      if (
+        !SIM[id] ||
+        !plan ||
+        !plan.options ||
+        !plan.options[
+          optionKey
+        ]
+      ) {
+        console.error(
+          'Opção inválida:',
+          id,
+          selection
+        );
 
-  window.pacSetMod = function(id, idx, btn) {
-    PERIOD[id] = idx;
-    SIM[id].mod = idx;
-    var card = btn.closest('.plans-alt-card');
-    if (card) {
-      syncCardPeriodRows(card, idx);
-      updateCardPrice(id, idx, card);
-      syncSimButtons(id, idx);
-    }
-    render(id);
-    // table feature removed
-    // update consultation CTA messaging if relevant
-    if (id === 'consulta') updateConsultaCTA();
-  };
-
-  window.pacSetMode = function(id, mode, btn) {
-    // only 'pix' or 'credito' supported
-    SIM[id].mode = mode === 'credito' ? 'credito' : 'pix';
-    btn.closest('.pac-toggle').querySelectorAll('.pac-mode-btn')
-      .forEach(function(b){ b.classList.remove('active'); });
-    btn.classList.add('active');
-    var pg = document.getElementById('pac-parc-' + id);
-    if (pg) pg.style.display = SIM[id].mode === 'credito' ? 'block' : 'none';
-    if (SIM[id].mode === 'credito') {
-      SIM[id].parc = 1;
-      document.querySelectorAll('#pac-parc-' + id + ' .pac-parc-btn')
-        .forEach(function(b,i){ b.classList.toggle('active', i===0); });
-    }
-    render(id);
-  };
-
-  window.pacSetParc = function(id, parc, btn) {
-    SIM[id].parc = parc;
-    btn.closest('.pac-parc-grid').querySelectorAll('.pac-parc-btn')
-      .forEach(function(b){ b.classList.remove('active'); });
-    btn.classList.add('active');
-    render(id);
-  };
-
-  // Table feature removed: buildTable/toggleTable removed to keep UI minimal.
-
-  function updateConsultaCTA() {
-    // Update consultation CTA text and href according to selected option
-    var idx = PERIOD['consulta'];
-    var optionKey = getOptionKey('consulta', idx);
-    var plan = DATA.plans && DATA.plans['consultas'];
-    var option = plan && plan.options && plan.options[optionKey];
-    var cta = document.getElementById('pac-cta-consulta');
-    if (!cta || !option) return;
-    var desc = option.description || option.label || '';
-    var text = encodeURIComponent('Olá Elias! Tenho interesse na ' + desc + '.');
-    cta.href = 'https://wa.me/5585996639595?text=' + text;
-    var label = optionKey === 'retorno' ? 'AGENDAR RETORNO →' : 'AGENDAR CONSULTA ' + (option.label ? option.label.toUpperCase() : '→');
-    cta.textContent = label;
-  }
-
-  document.addEventListener('DOMContentLoaded', function() {
-    ['lite','vip','consulta'].forEach(function(id) {
-      var simSection = document.getElementById('sim-mods-' + id);
-      if (simSection) {
-        var card = simSection.closest('.plans-alt-card');
-        if (card) {
-          syncCardPeriodRows(card, PERIOD[id]);
-          updateCardPrice(id, PERIOD[id], card);
-          syncSimButtons(id, PERIOD[id]);
-        }
+        return;
       }
+
+      SIM[id].option =
+        optionKey;
+
+      resetInstallments(id);
+
+      refresh(
+        id,
+        button
+      );
+    };
+
+  window.simSetMod =
+    function(
+      id,
+      selection,
+      button
+    ) {
+      var plan =
+        getPlan(id);
+
+      var optionKey =
+        resolveOptionKey(
+          id,
+          selection
+        );
+
+      if (
+        !SIM[id] ||
+        !plan ||
+        !plan.options ||
+        !plan.options[
+          optionKey
+        ]
+      ) {
+        console.error(
+          'Modalidade inválida:',
+          id,
+          selection
+        );
+
+        return;
+      }
+
+      SIM[id].option =
+        optionKey;
+
+      resetInstallments(id);
+
+      refresh(
+        id,
+        button
+      );
+    };
+
+  window.pacSetMode =
+    function(
+      id,
+      mode,
+      button
+    ) {
+      if (!SIM[id]) return;
+
+      SIM[id].mode =
+        mode === 'credito'
+          ? 'credito'
+          : 'pix';
+
+      var toggle =
+        button.closest(
+          '.pac-toggle'
+        );
+
+      if (toggle) {
+        toggle
+          .querySelectorAll(
+            '.pac-mode-btn'
+          )
+          .forEach(
+            function(modeButton) {
+              modeButton
+                .classList.remove(
+                  'active'
+                );
+
+              modeButton
+                .setAttribute(
+                  'aria-pressed',
+                  'false'
+                );
+            }
+          );
+      }
+
+      button.classList.add(
+        'active'
+      );
+
+      button.setAttribute(
+        'aria-pressed',
+        'true'
+      );
+
+      var installments =
+        document.getElementById(
+          'pac-parc-' + id
+        );
+
+      if (installments) {
+        installments.style.display =
+          SIM[id].mode ===
+            'credito'
+            ? 'block'
+            : 'none';
+      }
+
+      if (
+        SIM[id].mode ===
+        'credito'
+      ) {
+        resetInstallments(id);
+      }
+
       render(id);
+    };
+
+  window.pacSetParc =
+    function(
+      id,
+      installmentNumber,
+      button
+    ) {
+      if (!SIM[id]) return;
+
+      SIM[id].parc =
+        Number(
+          installmentNumber
+        );
+
+      var grid =
+        button.closest(
+          '.pac-parc-grid'
+        );
+
+      if (grid) {
+        grid
+          .querySelectorAll(
+            '.pac-parc-btn'
+          )
+          .forEach(
+            function(item) {
+              item.classList.remove(
+                'active'
+              );
+
+              item.setAttribute(
+                'aria-pressed',
+                'false'
+              );
+            }
+          );
+      }
+
+      button.classList.add(
+        'active'
+      );
+
+      button.setAttribute(
+        'aria-pressed',
+        'true'
+      );
+
+      render(id);
+    };
+
+  function initialize() {
+    [
+      'lite',
+      'vip',
+      'consulta'
+    ].forEach(function(id) {
+      var plan =
+        getPlan(id);
+
+      if (
+        !plan ||
+        !SIM[id]
+      ) {
+        return;
+      }
+
+      if (
+        plan.defaultOption &&
+        plan.options &&
+        plan.options[
+          plan.defaultOption
+        ]
+      ) {
+        SIM[id].option =
+          plan.defaultOption;
+      }
+
+      SIM[id].mode = 'pix';
+      SIM[id].parc = 1;
+
+      refresh(
+        id,
+        null
+      );
     });
-    updateConsultaCTA();
-  });
+  }
+
+  if (
+    document.readyState ===
+    'loading'
+  ) {
+    document.addEventListener(
+      'DOMContentLoaded',
+      initialize
+    );
+  } else {
+    initialize();
+  }
 })();
