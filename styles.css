@@ -3399,3 +3399,650 @@ footer {
   text-align: right;
   white-space: nowrap;
 }
+/* ══════════════════════════════════════════════════════════════
+   COMPARATIVO DE PLANOS
+   Escopo restrito à seção #planos
+══════════════════════════════════════════════════════════════ */
+
+#planos .plans-compare-grid {
+  width: 100%;
+  min-width: 0;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 16px;
+
+  margin-top: 48px;
+}
+
+#planos .plans-compare-card {
+  position: relative;
+
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+
+  background:
+    radial-gradient(
+      circle at 65% 15%,
+      rgba(88, 117, 133, 0.1),
+      transparent 55%
+    ),
+    linear-gradient(
+      145deg,
+      #0b0d11 0%,
+      #050608 100%
+    );
+
+  box-shadow:
+    0 22px 70px rgba(0, 0, 0, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+#planos .plans-compare-card--featured {
+  border-color: rgba(88, 117, 133, 0.4);
+
+  background:
+    radial-gradient(
+      circle at 65% 15%,
+      rgba(88, 117, 133, 0.2),
+      transparent 55%
+    ),
+    linear-gradient(
+      145deg,
+      #0d1116 0%,
+      #050608 100%
+    );
+
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.7),
+    0 0 44px rgba(88, 117, 133, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+#planos .plans-compare-inner {
+  position: relative;
+  z-index: 1;
+
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 26px 22px 24px;
+}
+
+#planos .plans-compare-head {
+  min-width: 0;
+  min-height: 82px;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+
+  padding-bottom: 20px;
+  margin-bottom: 8px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+#planos .plans-compare-head > div {
+  min-width: 0;
+}
+
+#planos .plans-compare-head .pac-label {
+  margin-bottom: 7px;
+}
+
+#planos .plans-compare-head .pac-delta {
+  flex: 0 0 auto;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+#planos .plans-compare-title {
+  margin: 0;
+
+  color: var(--white);
+
+  font-size: clamp(1.2rem, 1.6vw, 1.55rem);
+  font-weight: 900;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+
+  overflow-wrap: anywhere;
+}
+
+#planos .plans-compare-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 3;
+
+  padding: 4px 10px;
+
+  border: 1px solid rgba(88, 117, 133, 0.35);
+  border-radius: 999px;
+
+  background: rgba(88, 117, 133, 0.18);
+  color: var(--silver);
+
+  font-size: 0.56rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  white-space: nowrap;
+}
+
+#planos
+  .plans-compare-card--featured
+  .plans-compare-head {
+  padding-top: 28px;
+}
+
+#planos .plans-compare-list {
+  width: 100%;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+#planos .plans-compare-item {
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
+
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(88px, auto);
+
+  align-items: center;
+  gap: 14px;
+
+  padding: 12px 2px;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.055);
+}
+
+#planos .plans-compare-item:last-child {
+  border-bottom: 0;
+}
+
+#planos .plans-compare-feature {
+  min-width: 0;
+
+  color: rgba(255, 255, 255, 0.62);
+
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.45;
+
+  overflow-wrap: anywhere;
+}
+
+#planos .plans-compare-value {
+  min-width: 0;
+  max-width: 150px;
+
+  color: rgba(255, 255, 255, 0.8);
+
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: right;
+
+  overflow-wrap: anywhere;
+}
+
+#planos .plans-compare-value.is-positive {
+  color: #23e083;
+}
+
+#planos .plans-compare-value.is-negative {
+  color: rgba(234, 112, 112, 0.88);
+}
+
+#planos .plans-compare-note {
+  margin-top: auto;
+  padding-top: 16px;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.06);
+
+  color: rgba(255, 255, 255, 0.38);
+
+  font-size: 0.67rem;
+  line-height: 1.55;
+}
+
+#planos .plans-pricing-header {
+  width: 100%;
+  max-width: 720px;
+
+  margin: 96px auto 0;
+
+  text-align: center;
+}
+
+#planos .plans-pricing-title {
+  margin-bottom: 16px;
+
+  color: var(--white);
+
+  font-size: clamp(30px, 4vw, 48px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+/* Notebook */
+@media (max-width: 1180px) {
+  #planos .plans-compare-grid {
+    gap: 14px;
+  }
+
+  #planos .plans-compare-inner {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+
+  #planos .plans-compare-item {
+    gap: 10px;
+  }
+
+  #planos .plans-compare-feature {
+    font-size: 0.72rem;
+  }
+
+  #planos .plans-compare-value {
+    max-width: 125px;
+    font-size: 0.68rem;
+  }
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  #planos .plans-compare-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+
+    max-width: 720px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  #planos .plans-compare-card {
+    border-radius: 22px;
+  }
+
+  #planos .plans-compare-inner {
+    padding: 26px 24px 24px;
+  }
+
+  #planos .plans-compare-head {
+    min-height: 0;
+  }
+
+  #planos .plans-compare-item {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(130px, 36%);
+  }
+
+  #planos .plans-compare-feature {
+    font-size: 0.8rem;
+  }
+
+  #planos .plans-compare-value {
+    max-width: none;
+    font-size: 0.76rem;
+  }
+
+  #planos .plans-pricing-header {
+    margin-top: 76px;
+  }
+}
+
+/* Celular */
+@media (max-width: 640px) {
+  #planos .plans-compare-grid {
+    gap: 14px;
+    margin-top: 38px;
+  }
+
+  #planos .plans-compare-card {
+    border-radius: 18px;
+  }
+
+  #planos .plans-compare-inner {
+    padding: 22px 18px 20px;
+  }
+
+  #planos .plans-compare-head {
+    min-height: 0;
+    gap: 12px;
+
+    padding-bottom: 16px;
+  }
+
+  #planos .plans-compare-title {
+    font-size: 1.15rem;
+  }
+
+  #planos .plans-compare-item {
+    min-height: 50px;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(104px, 42%);
+
+    gap: 10px;
+    padding: 11px 0;
+  }
+
+  #planos .plans-compare-feature {
+    font-size: 0.74rem;
+  }
+
+  #planos .plans-compare-value {
+    font-size: 0.7rem;
+  }
+
+  #planos .plans-pricing-header {
+    margin-top: 64px;
+  }
+}
+
+/* Celulares estreitos */
+@media (max-width: 430px) {
+  #planos .plans-compare-inner {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+
+  #planos .plans-compare-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #planos
+    .plans-compare-card--featured
+    .plans-compare-head {
+    padding-top: 30px;
+  }
+
+  #planos .plans-compare-item {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(92px, 43%);
+
+    gap: 8px;
+  }
+
+  #planos .plans-compare-feature {
+    font-size: 0.7rem;
+  }
+
+  #planos .plans-compare-value {
+    font-size: 0.67rem;
+  }
+}
+
+@media (max-width: 360px) {
+  #planos .plans-compare-inner {
+    padding: 20px 14px 18px;
+  }
+
+  #planos .plans-compare-item {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(84px, 44%);
+
+    gap: 7px;
+  }
+
+  #planos .plans-compare-feature {
+    font-size: 0.66rem;
+  }
+
+  #planos .plans-compare-value {
+    font-size: 0.63rem;
+  }
+}
+/* ══════════════════════════════════════════════════════════════
+   CONSULTA ÚNICA — CENTRALIZAÇÃO E ALINHAMENTO DEFINITIVOS
+══════════════════════════════════════════════════════════════ */
+
+/*
+  Remove a antiga linha invisível criada quando Consultas
+  ainda possuía Consulta, Retorno e Combo.
+*/
+.plans-alt-card--consulta .pac-periods::after {
+  content: none !important;
+  display: none !important;
+}
+
+/*
+  A opção ativa normalmente recebe translateX(3px).
+  No card de consulta única, removemos esse deslocamento
+  para que a linha fique realmente centralizada.
+*/
+.plans-alt-card--consulta .pac-period-row.active {
+  transform: none;
+}
+
+/*
+  O simulador ainda estava preparado para três modalidades.
+  Com apenas uma consulta, o botão deve ocupar toda a largura.
+*/
+#sim-mods-consulta {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+
+#sim-mods-consulta .pac-sim-mod-btn {
+  width: 100%;
+  min-width: 0;
+}
+
+/*
+  Desktop:
+  183px corresponde à altura ocupada pelas quatro opções
+  dos cards Lite e VIP:
+  4 linhas de 42px + 3 espaços de 5px.
+
+  A única opção Consulta fica centralizada verticalmente
+  dentro dessa mesma área, mantendo o simulador alinhado.
+*/
+@media (min-width: 1025px) {
+  .plans-alt-card--consulta .pac-periods {
+    min-height: 183px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    gap: 5px;
+  }
+
+  .plans-alt-card--consulta .pac-period-row {
+    width: 100%;
+    flex: 0 0 auto;
+  }
+}
+/* ══════════════════════════════════════════════════════════════
+   CONSULTA ÚNICA — CENTRALIZAÇÃO E ALINHAMENTO DEFINITIVOS
+══════════════════════════════════════════════════════════════ */
+
+/*
+  Remove a antiga linha invisível criada quando Consultas
+  ainda possuía Consulta, Retorno e Combo.
+*/
+.plans-alt-card--consulta .pac-periods::after {
+  content: none !important;
+  display: none !important;
+}
+
+/*
+  A opção ativa normalmente recebe translateX(3px).
+  No card de consulta única, removemos esse deslocamento
+  para que a linha fique realmente centralizada.
+*/
+.plans-alt-card--consulta .pac-period-row.active {
+  transform: none;
+}
+
+/*
+  O simulador ainda estava preparado para três modalidades.
+  Com apenas uma consulta, o botão deve ocupar toda a largura.
+*/
+#sim-mods-consulta {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+
+#sim-mods-consulta .pac-sim-mod-btn {
+  width: 100%;
+  min-width: 0;
+}
+
+/*
+  Desktop:
+  183px corresponde à altura ocupada pelas quatro opções
+  dos cards Lite e VIP:
+  4 linhas de 42px + 3 espaços de 5px.
+
+  A única opção Consulta fica centralizada verticalmente
+  dentro dessa mesma área, mantendo o simulador alinhado.
+*/
+@media (min-width: 1025px) {
+  .plans-alt-card--consulta .pac-periods {
+    min-height: 183px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    gap: 5px;
+  }
+
+  .plans-alt-card--consulta .pac-period-row {
+    width: 100%;
+    flex: 0 0 auto;
+  }
+}
+
+/*
+   ══════════════════════════════════════════════════════════════
+   CONSULTA ÚNICA — CENTRALIZAÇÃO E ALINHAMENTO DEFINITIVOS
+══════════════════════════════════════════════════════════════ */
+
+/*
+  Remove a antiga linha invisível criada quando Consultas
+  ainda possuía Consulta, Retorno e Combo.
+*/
+.plans-alt-card--consulta .pac-periods::after {
+  content: none !important;
+  display: none !important;
+}
+
+/*
+  A opção ativa normalmente recebe translateX(3px).
+  No card de consulta única, removemos esse deslocamento
+  para que a linha fique realmente centralizada.
+*/
+.plans-alt-card--consulta .pac-period-row.active {
+  transform: none;
+}
+
+/*
+  O simulador ainda estava preparado para três modalidades.
+  Com apenas uma consulta, o botão deve ocupar toda a largura.
+*/
+#sim-mods-consulta {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+
+#sim-mods-consulta .pac-sim-mod-btn {
+  width: 100%;
+  min-width: 0;
+}
+
+/*
+  Desktop:
+  183px corresponde à altura ocupada pelas quatro opções
+  dos cards Lite e VIP:
+  4 linhas de 42px + 3 espaços de 5px.
+
+  A única opção Consulta fica centralizada verticalmente
+  dentro dessa mesma área, mantendo o simulador alinhado.
+*/
+@media (min-width: 1025px) {
+  .plans-alt-card--consulta .pac-periods {
+    min-height: 183px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    gap: 5px;
+  }
+
+  .plans-alt-card--consulta .pac-period-row {
+    width: 100%;
+    flex: 0 0 auto;
+  }
+}
+
+/*
+  Tablet e celular:
+  remove a altura artificial porque os cards aparecem
+  empilhados e não precisam de alinhamento horizontal.
+*/
+@media (max-width: 1024px) {
+  .plans-alt-card--consulta .pac-periods {
+    min-height: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+}

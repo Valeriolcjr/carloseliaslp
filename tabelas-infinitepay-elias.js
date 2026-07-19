@@ -612,27 +612,23 @@ const INFINITEPAY_APPROVED_DATA = {
         }
       }
     },
-
     /*
      * =========================================================
-     * CONSULTAS
+     * CONSULTA
      *
-     * Existem três modalidades:
-     * 1. Consulta
-     * 2. Retorno
-     * 3. Combo (consulta + retorno)
+     * Modalidade única:
+     * Consulta nutricional individualizada
+     * Valor: R$ 349,90 por sessão
      * =========================================================
      */
 
     consulta: {
-      label: 'Consultas',
+      label: 'Consulta',
 
       defaultOption: 'consulta',
 
       optionOrder: [
-        'consulta',
-        'retorno',
-        'combo'
+        'consulta'
       ],
 
       options: {
@@ -642,7 +638,7 @@ const INFINITEPAY_APPROVED_DATA = {
           base: 349.90,
 
           description:
-            'consulta nutricional',
+            'consulta nutricional individualizada',
 
           ctaLabel:
             'AGENDAR CONSULTA →',
@@ -709,160 +705,6 @@ const INFINITEPAY_APPROVED_DATA = {
             12: {
               total: 419.53,
               installment: 34.96
-            }
-          }
-        },
-
-        retorno: {
-          label: 'Retorno',
-
-          base: 299.90,
-
-          description:
-            'consulta de retorno',
-
-          ctaLabel:
-            'AGENDAR RETORNO →',
-
-          whatsappText:
-            'Olá Elias! Tenho interesse em agendar um retorno.',
-
-          credit: {
-            1: {
-              total: 313.04,
-              installment: 313.04
-            },
-
-            2: {
-              total: 319.35,
-              installment: 159.68
-            },
-
-            3: {
-              total: 322.49,
-              installment: 107.50
-            },
-
-            4: {
-              total: 325.63,
-              installment: 81.41
-            },
-
-            5: {
-              total: 328.84,
-              installment: 65.77
-            },
-
-            6: {
-              total: 332.00,
-              installment: 55.33
-            },
-
-            7: {
-              total: 343.00,
-              installment: 49.00
-            },
-
-            8: {
-              total: 346.28,
-              installment: 43.29
-            },
-
-            9: {
-              total: 349.62,
-              installment: 38.85
-            },
-
-            10: {
-              total: 352.97,
-              installment: 35.30
-            },
-
-            11: {
-              total: 356.39,
-              installment: 32.40
-            },
-
-            12: {
-              total: 359.88,
-              installment: 29.99
-            }
-          }
-        },
-
-        combo: {
-          label: 'Combo',
-
-          base: 549.90,
-
-          description:
-            'consulta + retorno',
-
-          ctaLabel:
-            'AGENDAR COMBO →',
-
-          whatsappText:
-            'Olá Elias! Tenho interesse no combo de consulta + retorno.',
-
-          credit: {
-            1: {
-              total: 573.99,
-              installment: 573.99
-            },
-
-            2: {
-              total: 585.54,
-              installment: 292.77
-            },
-
-            3: {
-              total: 591.32,
-              installment: 197.11
-            },
-
-            4: {
-              total: 597.10,
-              installment: 149.28
-            },
-
-            5: {
-              total: 602.98,
-              installment: 120.60
-            },
-
-            6: {
-              total: 608.77,
-              installment: 101.46
-            },
-
-            7: {
-              total: 629.09,
-              installment: 89.87
-            },
-
-            8: {
-              total: 640.35,
-              installment: 80.04
-            },
-
-            9: {
-              total: 641.23,
-              installment: 71.25
-            },
-
-            10: {
-              total: 647.31,
-              installment: 64.73
-            },
-
-            11: {
-              total: 653.54,
-              installment: 59.41
-            },
-
-            12: {
-              total: 659.88,
-              installment: 54.99
             }
           }
         }

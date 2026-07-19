@@ -36,11 +36,11 @@
 }
 </script>
 
-<link rel="stylesheet" href="styles.css?v=20260717-12">
+<link rel="stylesheet" href="styles.css?v=20260719-3">
 </head>
 <body>
 
-<!-- VERSÃO: carrossel com 9 transformações + consultas atualizadas — 17/07/2026 -->
+<!-- VERSÃO: carrossel com 9 transformações + consulta individual — 19/07/2026 -->
 
 <!-- WHATSAPP FLOAT -->
 <a href="https://wa.me/5585996639595?text=Ol%C3%A1%20Elias%2C%20quero%20saber%20mais%20sobre%20o%20acompanhamento%20nutricional%21" target="_blank" rel="noopener" class="wa-float" aria-label="Falar no WhatsApp">
@@ -726,9 +726,195 @@
   <div class="container">
     <div class="section-header">
       <p class="t-label reveal" style="margin-bottom:12px">Planos e investimento</p>
-      <h2 id="plans-title" class="t-headline section-title reveal">Escolha o plano<br>certo pra você.</h2>
+      <h2 id="plans-title" class="t-headline section-title reveal">Compare as<br>modalidades.</h2>
+      <p class="section-sub reveal">Veja o que cada opção oferece e escolha o nível de acompanhamento mais adequado para o seu momento.</p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- COMPARATIVO DE PLANOS                          -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="plans-compare-grid" aria-label="Comparativo entre Plano Lite, Plano VIP e Consultas">
+
+      <!-- PLANO LITE -->
+      <article class="plans-compare-card reveal reveal-delay-1">
+        <div class="plans-compare-inner">
+          <div class="plans-compare-head">
+            <div>
+              <p class="pac-label">PLANO LITE</p>
+              <h3 class="plans-compare-title">Lite</h3>
+            </div>
+
+            <span class="pac-delta neutral">Autonomia</span>
+          </div>
+
+          <ul class="plans-compare-list">
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Plano individualizado</span>
+              <span class="plans-compare-value is-positive"><span aria-hidden="true">✓</span> Sim</span>
+            </li>
+
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Entrega via App (Dietbox)</span>
+              <span class="plans-compare-value is-positive"><span aria-hidden="true">✓</span> Sim</span>
+            </li>
+
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Suporte via WhatsApp</span>
+              <span class="plans-compare-value is-positive"><span aria-hidden="true">✓</span> Sim</span>
+            </li>
+
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Guias práticos exclusivos</span>
+              <span class="plans-compare-value is-positive"><span aria-hidden="true">✓</span> Inclusos</span>
+            </li>
+
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Frequência de feedback</span>
+              <span class="plans-compare-value">Mensal</span>
+            </li>
+
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Ajustes na dieta</span>
+              <span class="plans-compare-value">Pontuais</span>
+            </li>
+
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Chamada de vídeo</span>
+              <span class="plans-compare-value is-negative"><span aria-hidden="true">×</span> Não incluída</span>
+            </li>
+
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Foco</span>
+              <span class="plans-compare-value">Autonomia</span>
+            </li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- PLANO VIP -->
+      <article class="plans-compare-card plans-compare-card--featured reveal reveal-delay-2">
+        <div class="plans-compare-badge">Mais indicado</div>
+
+        <div class="plans-compare-inner">
+          <div class="plans-compare-head">
+            <div>
+              <p class="pac-label">PLANO VIP</p>
+              <h3 class="plans-compare-title">Full (VIP)</h3>
+            </div>
+
+            <span class="pac-delta green">+Recomendado</span>
+          </div>
+
+          <ul class="plans-compare-list">
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Plano individualizado</span>
+              <span class="plans-compare-value is-positive"><span aria-hidden="true">✓</span> Sim</span>
+            </li>
+
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Entrega via App (Dietbox)</span>
+              <span class="plans-compare-value is-positive"><span aria-hidden="true">✓</span> Sim</span>
+            </li>
+
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Suporte via WhatsApp</span>
+              <span class="plans-compare-value is-positive"><span aria-hidden="true">✓</span> Sim</span>
+            </li>
+
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Guias práticos exclusivos</span>
+              <span class="plans-compare-value is-positive"><span aria-hidden="true">✓</span> Inclusos</span>
+            </li>
+
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Frequência de feedback</span>
+              <span class="plans-compare-value">Semanal</span>
+            </li>
+
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Ajustes na dieta</span>
+              <span class="plans-compare-value">Quando necessário</span>
+            </li>
+
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Chamada de vídeo</span>
+              <span class="plans-compare-value is-positive"><span aria-hidden="true">✓</span> Incluída</span>
+            </li>
+
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Foco</span>
+              <span class="plans-compare-value">Máximo suporte</span>
+            </li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- CONSULTAS -->
+      <article class="plans-compare-card reveal reveal-delay-3">
+        <div class="plans-compare-inner">
+          <div class="plans-compare-head">
+            <div>
+              <p class="pac-label">CONSULTAS</p>
+              <h3 class="plans-compare-title">Presencial  </h3>
+            </div>
+
+            <span class="pac-delta neutral">Por sessão</span>
+          </div>
+
+          <ul class="plans-compare-list">
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Plano individualizado</span>
+              <span class="plans-compare-value is-positive"><span aria-hidden="true">✓</span> Sim</span>
+            </li>
+
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Entrega via App (Dietbox)</span>
+              <span class="plans-compare-value is-positive"><span aria-hidden="true">✓</span> Sim</span>
+            </li>
+
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Suporte via WhatsApp</span>
+              <span class="plans-compare-value">Orientações</span>
+            </li>
+
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Guias práticos exclusivos</span>
+              <span class="plans-compare-value is-positive"><span aria-hidden="true">✓</span> Inclusos</span>
+            </li>
+
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Frequência de feedback</span>
+              <span class="plans-compare-value is-negative"><span aria-hidden="true">×</span> Não contínuo</span>
+            </li>
+
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Ajustes na dieta</span>
+              <span class="plans-compare-value is-negative"><span aria-hidden="true">×</span> Não contínuos</span>
+            </li>
+
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Chamada de vídeo</span>
+              <span class="plans-compare-value is-negative"><span aria-hidden="true">×</span> Não incluída</span>
+            </li>
+
+            <li class="plans-compare-item">
+              <span class="plans-compare-feature">Foco</span>
+              <span class="plans-compare-value">Avaliação pontual</span>
+            </li>
+          </ul>
+
+        </div>
+      </article>
+
+    </div>
+
+    <!-- CABEÇALHO DOS VALORES -->
+    <div class="plans-pricing-header">
+      <p class="t-label reveal" style="margin-bottom:12px">Valores e formas de pagamento</p>
+      <h3 class="t-headline plans-pricing-title reveal">Escolha a melhor<br>opção para você.</h3>
       <p class="section-sub reveal">Parcelamento disponível. Clique na modalidade e simule pelo InfinitePay.</p>
     </div>
+
     <div class="plans-alt-grid">
       <div class="plans-alt-card">
         
@@ -809,7 +995,7 @@
   <span class="pac-period">,90/sessão</span>
 </div>
 
-<div class="pac-equiv">escolha entre consulta, retorno ou combo</div>
+<div class="pac-equiv">consulta nutricional individualizada</div>
 
           <div class="pac-spark">
             <svg viewBox="0 0 180 50" fill="none" aria-hidden="true">
@@ -840,26 +1026,6 @@
               <span class="pac-period-name">Consulta</span>
               <span class="pac-period-val">R$ 349,90</span>
             </button>
-
-            <button
-              type="button"
-              class="pac-period-row"
-              onclick="pacSetMod('consulta',1,this)"
-              aria-pressed="false"
-            >
-              <span class="pac-period-name">Retorno</span>
-              <span class="pac-period-val">R$ 299,90</span>
-            </button>
-
-            <button
-              type="button"
-              class="pac-period-row"
-              onclick="pacSetMod('consulta',2,this)"
-              aria-pressed="false"
-            >
-              <span class="pac-period-name">Combo (consulta + retorno)</span>
-              <span class="pac-period-val">R$ 549,90</span>
-            </button>
           </div>
 
           <div class="pac-sim">
@@ -876,24 +1042,6 @@
                 aria-pressed="true"
               >
                 Consulta
-              </button>
-
-              <button
-                type="button"
-                class="pac-sim-mod-btn"
-                onclick="simSetMod('consulta',1,this)"
-                aria-pressed="false"
-              >
-                Retorno
-              </button>
-
-              <button
-                type="button"
-                class="pac-sim-mod-btn"
-                onclick="simSetMod('consulta',2,this)"
-                aria-pressed="false"
-              >
-                Combo
               </button>
             </div>
 
@@ -1423,8 +1571,7 @@
 
 
 
-
-<script src="tabelas-infinitepay-elias.js?v=20260717-12"></script>
-<script src="scripts.js?v=20260717-12"></script>
+<script src="tabelas-infinitepay-elias.js?v=20260719-2"></script>
+<script src="scripts.js?v=20260719-2"></script>
 </body>
 </html>
